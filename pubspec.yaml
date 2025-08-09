@@ -25,6 +25,8 @@ dependencies:
   cached_network_image: ^3.4.1
   dio: ^5.7.0
   freezed_annotation: ^3.0.0
+  encrypted_shared_preferences: ^3.0.1
+  flutter_bloc: ^8.1.6
 
 dev_dependencies:
   flutter_test:
