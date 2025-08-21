@@ -7,6 +7,6 @@ class BookSearchPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SizedBox.shrink();
+    return Center(child: const Text('Book Search page'));
   }
 }
