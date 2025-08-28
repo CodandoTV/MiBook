@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:mibook/layers/domain/models/book_list_domain.dart';
 
 part 'book_list_data.g.dart';
 
@@ -18,6 +19,12 @@ class BookListData {
       _$BookListDataFromJson(json);
 
   Map<String, dynamic> toJson() => _$BookListDataToJson(this);
+
+  BookListDomain toDomain() {
+    return BookListDomain(
+      books: items.map((item) => item.toDomain()).toList(),
+    );
+  }
 }
 
 @JsonSerializable()
@@ -46,6 +53,17 @@ class BookItem {
       _$BookItemFromJson(json);
 
   Map<String, dynamic> toJson() => _$BookItemToJson(this);
+
+  BookDomain toDomain() {
+    return BookDomain(
+      id: id,
+      kind: kind,
+      title: volumeInfo.title,
+      authors: volumeInfo.authors,
+      description: volumeInfo.description,
+      thumbnail: volumeInfo.imageLinks?.thumbnail,
+    );
+  }
 }
 
 @JsonSerializable()
