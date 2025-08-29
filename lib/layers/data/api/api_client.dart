@@ -34,7 +34,13 @@ abstract class IApiClient {
 class ApiClient implements IApiClient {
   final Dio _dio;
 
-  ApiClient(this._dio);
+  ApiClient()
+    : _dio = Dio(
+        BaseOptions(
+          baseUrl: 'https://www.googleapis.com/books/v1/',
+          headers: {'Content-Type': 'application/json'},
+        ),
+      );
 
   @override
   Future<Map<String, dynamic>> get({

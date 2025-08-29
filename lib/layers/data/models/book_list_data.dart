@@ -7,6 +7,7 @@ part 'book_list_data.g.dart';
 class BookListData {
   final String kind;
   final int totalItems;
+  @JsonKey(defaultValue: [])
   final List<BookItem> items;
 
   BookListData({
@@ -22,6 +23,7 @@ class BookListData {
 
   BookListDomain toDomain() {
     return BookListDomain(
+      totalItems: totalItems,
       books: items.map((item) => item.toDomain()).toList(),
     );
   }

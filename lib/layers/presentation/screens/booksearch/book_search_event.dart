@@ -8,3 +8,5 @@ class DidChangeSearchTextEvent extends BookSearchEvent {
   final String text;
   DidChangeSearchTextEvent(this.text);
 }
+
+class DidFinishPageEvent extends BookSearchEvent {}

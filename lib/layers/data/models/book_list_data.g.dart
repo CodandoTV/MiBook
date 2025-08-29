@@ -9,9 +9,11 @@ part of 'book_list_data.dart';
 BookListData _$BookListDataFromJson(Map<String, dynamic> json) => BookListData(
   kind: json['kind'] as String,
   totalItems: (json['totalItems'] as num).toInt(),
-  items: (json['items'] as List<dynamic>)
-      .map((e) => BookItem.fromJson(e as Map<String, dynamic>))
-      .toList(),
+  items:
+      (json['items'] as List<dynamic>?)
+          ?.map((e) => BookItem.fromJson(e as Map<String, dynamic>))
+          .toList() ??
+      [],
 );
 
 Map<String, dynamic> _$BookListDataToJson(BookListData instance) =>

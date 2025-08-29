@@ -12,8 +12,12 @@ class SearchRepository implements ISearchRepository {
   @override
   Future<BookListDomain> searchByTitle({
     required String initTitle,
+    required int startIndex,
   }) async {
-    final data = await _dataSource.searchByTitle(initTitle: initTitle);
+    final data = await _dataSource.searchByTitle(
+      initTitle: initTitle,
+      startIndex: startIndex,
+    );
     return data.toDomain();
   }
 }

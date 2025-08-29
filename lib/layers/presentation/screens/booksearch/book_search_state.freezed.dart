@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$BookSearchState {
 
- bool get isLoading; String? get errorMessage; String get searchText; List<BookUI> get books;
+ bool get isLoading; String? get errorMessage; String get searchText; List<BookUI> get books; bool get isPageLoading; bool get canLoadNextPage;
 /// Create a copy of BookSearchState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $BookSearchStateCopyWith<BookSearchState> get copyWith => _$BookSearchStateCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is BookSearchState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.searchText, searchText) || other.searchText == searchText)&&const DeepCollectionEquality().equals(other.books, books));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is BookSearchState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.searchText, searchText) || other.searchText == searchText)&&const DeepCollectionEquality().equals(other.books, books)&&(identical(other.isPageLoading, isPageLoading) || other.isPageLoading == isPageLoading)&&(identical(other.canLoadNextPage, canLoadNextPage) || other.canLoadNextPage == canLoadNextPage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,isLoading,errorMessage,searchText,const DeepCollectionEquality().hash(books));
+int get hashCode => Object.hash(runtimeType,isLoading,errorMessage,searchText,const DeepCollectionEquality().hash(books),isPageLoading,canLoadNextPage);
 
 @override
 String toString() {
-  return 'BookSearchState(isLoading: $isLoading, errorMessage: $errorMessage, searchText: $searchText, books: $books)';
+  return 'BookSearchState(isLoading: $isLoading, errorMessage: $errorMessage, searchText: $searchText, books: $books, isPageLoading: $isPageLoading, canLoadNextPage: $canLoadNextPage)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $BookSearchStateCopyWith<$Res>  {
   factory $BookSearchStateCopyWith(BookSearchState value, $Res Function(BookSearchState) _then) = _$BookSearchStateCopyWithImpl;
 @useResult
 $Res call({
- bool isLoading, String? errorMessage, String searchText, List<BookUI> books
+ bool isLoading, String? errorMessage, String searchText, List<BookUI> books, bool isPageLoading, bool canLoadNextPage
 });
 
 
@@ -62,13 +62,15 @@ class _$BookSearchStateCopyWithImpl<$Res>
 
 /// Create a copy of BookSearchState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? isLoading = null,Object? errorMessage = freezed,Object? searchText = null,Object? books = null,}) {
-  return _then(_self.copyWith(
+@pragma('vm:prefer-inline') @override $Res call({Object? isLoading = null,Object? errorMessage = freezed,Object? searchText = null,Object? books = null,Object? isPageLoading = null,Object? canLoadNextPage = null,}) {
+  return _then(BookSearchState(
 isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
 as bool,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String?,searchText: null == searchText ? _self.searchText : searchText // ignore: cast_nullable_to_non_nullable
 as String,books: null == books ? _self.books : books // ignore: cast_nullable_to_non_nullable
-as List<BookUI>,
+as List<BookUI>,isPageLoading: null == isPageLoading ? _self.isPageLoading : isPageLoading // ignore: cast_nullable_to_non_nullable
+as bool,canLoadNextPage: null == canLoadNextPage ? _self.canLoadNextPage : canLoadNextPage // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 
@@ -89,11 +91,10 @@ extension BookSearchStatePatterns on BookSearchState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _BookSearchState value)?  $default,{required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case _BookSearchState() when $default != null:
-return $default(_that);case _:
+case _:
   return orElse();
 
 }
@@ -111,11 +112,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _BookSearchState value)  $default,){
+@optionalTypeArgs TResult map<TResult extends Object?>(){
 final _that = this;
 switch (_that) {
-case _BookSearchState():
-return $default(_that);case _:
+case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -132,11 +132,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _BookSearchState value)?  $default,){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(){
 final _that = this;
 switch (_that) {
-case _BookSearchState() when $default != null:
-return $default(_that);case _:
+case _:
   return null;
 
 }
@@ -153,10 +152,9 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool isLoading,  String? errorMessage,  String searchText,  List<BookUI> books)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case _BookSearchState() when $default != null:
-return $default(_that.isLoading,_that.errorMessage,_that.searchText,_that.books);case _:
+case _:
   return orElse();
 
 }
@@ -174,10 +172,9 @@ return $default(_that.isLoading,_that.errorMessage,_that.searchText,_that.books)
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool isLoading,  String? errorMessage,  String searchText,  List<BookUI> books)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>() {final _that = this;
 switch (_that) {
-case _BookSearchState():
-return $default(_that.isLoading,_that.errorMessage,_that.searchText,_that.books);case _:
+case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -194,92 +191,13 @@ return $default(_that.isLoading,_that.errorMessage,_that.searchText,_that.books)
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool isLoading,  String? errorMessage,  String searchText,  List<BookUI> books)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>() {final _that = this;
 switch (_that) {
-case _BookSearchState() when $default != null:
-return $default(_that.isLoading,_that.errorMessage,_that.searchText,_that.books);case _:
+case _:
   return null;
 
 }
 }
-
-}
-
-/// @nodoc
-
-
-class _BookSearchState implements BookSearchState {
-  const _BookSearchState({required this.isLoading, this.errorMessage, required this.searchText, required final  List<BookUI> books}): _books = books;
-  
-
-@override final  bool isLoading;
-@override final  String? errorMessage;
-@override final  String searchText;
- final  List<BookUI> _books;
-@override List<BookUI> get books {
-  if (_books is EqualUnmodifiableListView) return _books;
-  // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_books);
-}
-
-
-/// Create a copy of BookSearchState
-/// with the given fields replaced by the non-null parameter values.
-@override @JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-_$BookSearchStateCopyWith<_BookSearchState> get copyWith => __$BookSearchStateCopyWithImpl<_BookSearchState>(this, _$identity);
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _BookSearchState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.searchText, searchText) || other.searchText == searchText)&&const DeepCollectionEquality().equals(other._books, _books));
-}
-
-
-@override
-int get hashCode => Object.hash(runtimeType,isLoading,errorMessage,searchText,const DeepCollectionEquality().hash(_books));
-
-@override
-String toString() {
-  return 'BookSearchState(isLoading: $isLoading, errorMessage: $errorMessage, searchText: $searchText, books: $books)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class _$BookSearchStateCopyWith<$Res> implements $BookSearchStateCopyWith<$Res> {
-  factory _$BookSearchStateCopyWith(_BookSearchState value, $Res Function(_BookSearchState) _then) = __$BookSearchStateCopyWithImpl;
-@override @useResult
-$Res call({
- bool isLoading, String? errorMessage, String searchText, List<BookUI> books
-});
-
-
-
-
-}
-/// @nodoc
-class __$BookSearchStateCopyWithImpl<$Res>
-    implements _$BookSearchStateCopyWith<$Res> {
-  __$BookSearchStateCopyWithImpl(this._self, this._then);
-
-  final _BookSearchState _self;
-  final $Res Function(_BookSearchState) _then;
-
-/// Create a copy of BookSearchState
-/// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? isLoading = null,Object? errorMessage = freezed,Object? searchText = null,Object? books = null,}) {
-  return _then(_BookSearchState(
-isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
-as bool,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
-as String?,searchText: null == searchText ? _self.searchText : searchText // ignore: cast_nullable_to_non_nullable
-as String,books: null == books ? _self._books : books // ignore: cast_nullable_to_non_nullable
-as List<BookUI>,
-  ));
-}
-
 
 }
 

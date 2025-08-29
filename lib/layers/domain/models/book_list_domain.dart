@@ -1,7 +1,9 @@
 class BookListDomain {
+  final int totalItems;
   final List<BookDomain> books;
 
   BookListDomain({
+    required this.totalItems,
     required this.books,
   });
 }
