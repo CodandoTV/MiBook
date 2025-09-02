@@ -12,6 +12,7 @@ class BookSearchViewModel extends Bloc<BookSearchEvent, BookSearchState> {
 
   BookSearchViewModel(this._searchBooks) : super(BookSearchState.initial()) {
     on<DidChangeSearchTextEvent>((event, emit) async {
+      print('DidChangeSearchTextEvent: ${event.text}');
       emit(state.copyWith(searchText: event.text));
     });
     on<DidClickSearchEvent>((event, emit) async {
@@ -24,7 +25,9 @@ class BookSearchViewModel extends Bloc<BookSearchEvent, BookSearchState> {
           canLoadNextPage: true,
         ),
       );
+      print('Click search with text: ${state.searchText}');
       final response = await _search(state.searchText);
+      print('Response received with ${response}');
       emit(
         state.copyWith(
           books: response,

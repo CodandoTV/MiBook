@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mibook/core/designsystem/atoms/colors.dart';
 
 class InputField extends StatelessWidget {
   final String label;
@@ -26,6 +27,9 @@ class InputField extends StatelessWidget {
         TextField(
           decoration: InputDecoration(
             border: OutlineInputBorder(),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: onBorder),
+            ),
           ),
           onChanged: onChanged,
         ),

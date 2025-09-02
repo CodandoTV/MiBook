@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mibook/core/designsystem/molecules/buttons/primary_button.dart';
 import 'package:mibook/core/designsystem/molecules/inputfields/input_field.dart';
+import 'package:mibook/core/designsystem/organisms/list_item.dart';
 import 'package:mibook/core/di/di.dart';
 import 'package:mibook/core/utils/strings.dart';
 import 'package:mibook/layers/presentation/screens/booksearch/book_search_event.dart';
@@ -34,12 +35,28 @@ class _SearchScaffold extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Search Books'),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        scrolledUnderElevation: 0.0,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            const Text(
+              'Search Books',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
       ),
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16.0,
+            ),
             child: Row(
               children: [
                 Expanded(
@@ -69,42 +86,55 @@ class _SearchScaffold extends StatelessWidget {
               ],
             ),
           ),
+          const SizedBox(height: 16),
           Expanded(
-            child: BlocBuilder<BookSearchViewModel, BookSearchState>(
-              builder: (context, state) {
-                if (state.isLoading) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (state.errorMessage != null) {
-                  return Center(child: Text('Error: ${state.errorMessage}'));
-                } else if (state.books.isEmpty) {
-                  return const Center(child: Text('No books found'));
-                } else {
-                  return ListView.builder(
-                    controller: _scrollController,
-                    itemCount: state.isPageLoading
-                        ? state.books.length + 1
-                        : state.books.length,
-                    itemBuilder: (context, index) {
-                      if (state.isPageLoading && index == state.books.length) {
-                        return _progressIndicator();
-                      }
-                      final book = state.books[index];
-                      if (index == state.books.length - 1 &&
-                          !state.isPageLoading &&
-                          state.canLoadNextPage) {
-                        viewModel.add(DidFinishPageEvent());
-                      }
-                      return ListTile(
-                        leading: book.thumbnail != null
-                            ? Image.network(book.thumbnail!)
-                            : const Icon(Icons.book),
-                        title: Text(book.title),
-                        subtitle: Text(book.authors),
-                      );
-                    },
-                  );
-                }
-              },
+            child: Center(
+              child: BlocBuilder<BookSearchViewModel, BookSearchState>(
+                builder: (context, state) {
+                  if (state.isLoading) {
+                    return const CircularProgressIndicator();
+                  } else if (state.errorMessage != null) {
+                    return Text('Error: ${state.errorMessage}');
+                  } else if (state.books.isEmpty) {
+                    return const Text('No books found');
+                  } else {
+                    return ListView.builder(
+                      controller: _scrollController,
+                      itemCount: state.isPageLoading
+                          ? state.books.length + 1
+                          : state.books.length,
+                      itemBuilder: (context, index) {
+                        if (state.isPageLoading &&
+                            index == state.books.length) {
+                          return _progressIndicator();
+                        }
+                        final book = state.books[index];
+                        if (index == state.books.length - 1 &&
+                            !state.isPageLoading &&
+                            state.canLoadNextPage) {
+                          viewModel.add(DidFinishPageEvent());
+                        }
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0,
+                            vertical: 8.0,
+                          ),
+                          child: ListItem(
+                            input: BookItemInput(
+                              id: book.id,
+                              kind: book.kind,
+                              title: book.title,
+                              authors: book.authors,
+                              description: book.description,
+                              thumbnail: book.thumbnail,
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  }
+                },
+              ),
             ),
           ),
         ],
