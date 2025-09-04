@@ -73,22 +73,27 @@ class GenericInput extends ListItemInput {
 
 class ListItem extends StatelessWidget {
   final ListItemInput input;
+  final Function()? onTap;
 
   const ListItem({
     super.key,
     required this.input,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        color: onBackground,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: input.content,
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          color: onBackground,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: input.content,
+        ),
       ),
     );
   }

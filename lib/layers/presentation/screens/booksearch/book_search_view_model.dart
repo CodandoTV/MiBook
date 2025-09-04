@@ -68,7 +68,7 @@ class BookSearchViewModel extends Bloc<BookSearchEvent, BookSearchState> {
   }
 
   Future<List<BookUI>> _search(String initTitle) async {
-    final response = await _searchBooks.search(
+    final response = await _searchBooks(
       initTitle: initTitle,
       startIndex: currentIndex,
     );

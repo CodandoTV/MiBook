@@ -20,4 +20,12 @@ class SearchRepository implements ISearchRepository {
     );
     return data.toDomain();
   }
+
+  @override
+  Future<BookDomain> searchById({
+    required String id,
+  }) async {
+    final data = await _dataSource.searchById(id: id);
+    return data.toDomain();
+  }
 }

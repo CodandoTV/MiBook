@@ -5,4 +5,7 @@ abstract class ISearchRepository {
     required String initTitle,
     required int startIndex,
   });
+  Future<BookDomain> searchById({
+    required String id,
+  });
 }

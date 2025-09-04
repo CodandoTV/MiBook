@@ -16,7 +16,10 @@ class AppRouter extends RootStackRouter {
         ),
         AutoRoute(
           page: SearchRoute.page,
-          children: [AutoRoute(page: BookSearchRoute.page)],
+          children: [
+            AutoRoute(page: BookSearchRoute.page),
+            AutoRoute(page: BoolDetailsRoute.page),
+          ],
         ),
         AutoRoute(
           page: ObjectiveRoute.page,

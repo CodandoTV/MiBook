@@ -1,10 +1,12 @@
-import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mibook/core/designsystem/molecules/buttons/primary_button.dart';
 import 'package:mibook/core/designsystem/molecules/inputfields/input_field.dart';
+import 'package:mibook/core/designsystem/organisms/app_nav_bar.dart';
 import 'package:mibook/core/designsystem/organisms/list_item.dart';
 import 'package:mibook/core/di/di.dart';
+import 'package:mibook/core/routes/app_router.gr.dart';
 import 'package:mibook/core/utils/strings.dart';
 import 'package:mibook/layers/presentation/screens/booksearch/book_search_event.dart';
 import 'package:mibook/layers/presentation/screens/booksearch/book_search_state.dart';
@@ -34,22 +36,9 @@ class _SearchScaffold extends StatelessWidget {
     final controller = TextEditingController(text: viewModel.state.searchText);
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        scrolledUnderElevation: 0.0,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            const Text(
-              'Search Books',
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
+      appBar: AppNavBar(
+        titleText: 'Search Books',
+        textAlignment: AppNavBarTextAlignment.start,
       ),
       body: Column(
         children: [
@@ -120,6 +109,9 @@ class _SearchScaffold extends StatelessWidget {
                             vertical: 8.0,
                           ),
                           child: ListItem(
+                            onTap: () => context.router.push(
+                              BoolDetailsRoute(id: book.id),
+                            ),
                             input: BookItemInput(
                               id: book.id,
                               kind: book.kind,

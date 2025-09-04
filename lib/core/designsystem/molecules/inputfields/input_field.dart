@@ -24,14 +24,17 @@ class InputField extends StatelessWidget {
       children: [
         if (label.isNotEmpty) Text(label),
         const SizedBox(height: 8),
-        TextField(
-          decoration: InputDecoration(
-            border: OutlineInputBorder(),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: onBorder),
+        SizedBox(
+          height: 48,
+          child: TextField(
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: onBorder),
+              ),
             ),
+            onChanged: onChanged,
           ),
-          onChanged: onChanged,
         ),
       ],
     );

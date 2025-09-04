@@ -7,6 +7,9 @@ abstract class ISearchDataSource {
     required String initTitle,
     required int startIndex,
   });
+  Future<BookItem> searchById({
+    required String id,
+  });
 }
 
 @Injectable(as: ISearchDataSource)
@@ -29,6 +32,17 @@ class SearchDataSource implements ISearchDataSource {
       },
     );
     final data = BookListData.fromJson(response);
+    return data;
+  }
+
+  @override
+  Future<BookItem> searchById({
+    required String id,
+  }) async {
+    final response = await _apiClient.get(
+      endpoint: 'volumes/$id',
+    );
+    final data = BookItem.fromJson(response);
     return data;
   }
 }
