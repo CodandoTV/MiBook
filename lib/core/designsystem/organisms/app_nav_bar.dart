@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:mibook/core/designsystem/modifiers/display_as_loader.dart';
 
 enum AppNavBarTextAlignment { center, start }
 
 class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
   final String titleText;
+  final bool isTitleLoading;
   final AppNavBarTextAlignment textAlignment;
   final Function()? onBack;
 
@@ -11,6 +13,7 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
     super.key,
     this.onBack,
     required this.titleText,
+    this.isTitleLoading = false,
     this.textAlignment = AppNavBarTextAlignment.center,
   });
 
@@ -24,7 +27,7 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
               Align(
                 alignment: Alignment.centerLeft,
                 child: Transform.translate(
-                  offset: const Offset(0, -8),
+                  offset: const Offset(0, -16),
                   child: SizedBox(
                     width: 48,
                     height: 48,
@@ -39,10 +42,7 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
               ),
             Align(
               alignment: Alignment.center,
-              child: Text(
-                titleText,
-                style: const TextStyle(color: Colors.black),
-              ),
+              child: _title(),
             ),
           ],
         );
@@ -56,13 +56,24 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
                 onPressed: onBack,
                 icon: const Icon(Icons.chevron_left, color: Colors.black),
               ),
-            Text(
-              titleText,
-              style: const TextStyle(color: Colors.black),
-            ),
+            _title(),
           ],
         );
     }
+  }
+
+  Widget _title() {
+    return DisplayAsLoader(
+      isLoading: isTitleLoading,
+      child: Text(
+        titleText,
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: titleText.length > 20 ? 14 : 22,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
   }
 
   @override

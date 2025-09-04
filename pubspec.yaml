@@ -29,6 +29,7 @@ dependencies:
   flutter_bloc: ^8.1.6
   mockito: ^5.4.6
   shimmer: ^3.0.0
+  flutter_html: ^3.0.0
 
 dev_dependencies:
   flutter_test:
