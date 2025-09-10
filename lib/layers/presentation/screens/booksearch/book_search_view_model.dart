@@ -27,7 +27,7 @@ class BookSearchViewModel extends Bloc<BookSearchEvent, BookSearchState> {
       );
       print('Click search with text: ${state.searchText}');
       final response = await _search(state.searchText);
-      print('Response received with ${response}');
+      print('Response received with $response');
       emit(
         state.copyWith(
           books: response,
