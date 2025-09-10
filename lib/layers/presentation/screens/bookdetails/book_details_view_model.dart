@@ -48,7 +48,6 @@ class BookDetailsViewModel extends Bloc<BookDetailsEvent, BookDetailsState> {
       final bookDetails = await _getBookDetails(id: bookId!);
       return BookDetailsUI.fromDomain(bookDetails);
     } else {
-      emit(state.copyWith(errorMessage: "Book ID is null"));
       return null;
     }
   }

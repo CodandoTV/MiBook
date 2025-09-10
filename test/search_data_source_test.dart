@@ -29,11 +29,18 @@ void main() {
       when(
         mockApiClient.get(
           endpoint: 'volumes',
-          queryParameters: {'q': 'intitle:harry potter'},
+          queryParameters: {
+            'q': 'intitle:harry potter',
+            'startIndex': 0,
+            'maxResults': 40,
+          },
         ),
       ).thenAnswer((_) async => mockJson);
 
-      final result = await dataSource.searchByTitle(initTitle: 'harry potter');
+      final result = await dataSource.searchByTitle(
+        startIndex: 0,
+        initTitle: 'harry potter',
+      );
       expect(result.kind, expectedBookList.kind);
       expect(result.totalItems, expectedBookList.totalItems);
       expect(result.items, expectedBookList.items);
@@ -43,12 +50,19 @@ void main() {
       when(
         mockApiClient.get(
           endpoint: 'volumes',
-          queryParameters: {'q': 'intitle:harry potter'},
+          queryParameters: {
+            'q': 'intitle:harry potter',
+            'startIndex': 0,
+            'maxResults': 40,
+          },
         ),
       ).thenThrow(Exception('API error'));
 
       expect(
-        () => dataSource.searchByTitle(initTitle: 'harry potter'),
+        () => dataSource.searchByTitle(
+          startIndex: 0,
+          initTitle: 'harry potter',
+        ),
         throwsException,
       );
     });
