@@ -65,12 +65,17 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
   Widget _title() {
     return DisplayAsLoader(
       isLoading: isTitleLoading,
-      child: Text(
-        titleText,
-        style: TextStyle(
-          color: Colors.black,
-          fontSize: titleText.length > 20 ? 14 : 22,
-          fontWeight: FontWeight.bold,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 250),
+        child: Text(
+          titleText,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: titleText.length > 20 ? 14 : 22,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     );
