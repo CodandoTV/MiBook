@@ -6,6 +6,9 @@ class InputField extends StatelessWidget {
   final TextEditingController controller;
   final bool isEnabled;
   final String placeholder;
+  final String? suffixText;
+  final String? prefixText;
+  final TextInputType? keyboardType;
   final Function(String) onChanged;
 
   const InputField({
@@ -14,6 +17,9 @@ class InputField extends StatelessWidget {
     required this.controller,
     this.isEnabled = true,
     this.placeholder = '',
+    this.suffixText,
+    this.prefixText,
+    this.keyboardType,
     required this.onChanged,
   });
 
@@ -27,11 +33,14 @@ class InputField extends StatelessWidget {
         SizedBox(
           height: 48,
           child: TextField(
+            keyboardType: keyboardType,
             decoration: InputDecoration(
               border: OutlineInputBorder(),
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: onBorder),
               ),
+              suffixText: suffixText,
+              prefixText: prefixText,
             ),
             onChanged: onChanged,
           ),

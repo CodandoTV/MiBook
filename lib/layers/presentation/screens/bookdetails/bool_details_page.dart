@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:mibook/core/designsystem/molecules/buttons/primary_button.dart';
+import 'package:mibook/core/designsystem/molecules/inputfields/input_field.dart';
 import 'package:mibook/core/designsystem/organisms/app_nav_bar.dart';
 import 'package:mibook/core/designsystem/organisms/list_item.dart';
 import 'package:mibook/core/di/di.dart';
@@ -123,12 +124,24 @@ class _BookDetailsContent extends StatelessWidget {
                                     child: Material(
                                       color: Colors.transparent,
                                       child: AlertDialog(
-                                        content: _StartReadingDialogContent(
-                                          book: book,
-                                          onClickStartReading:
-                                              (double progress) {
-                                                Navigator.of(context).pop();
-                                              },
+                                        backgroundColor: Colors.white,
+                                        insetPadding:
+                                            EdgeInsets.zero, // remove margin
+                                        contentPadding: EdgeInsets
+                                            .zero, // remove inner padding if needed
+                                        content: SizedBox(
+                                          width:
+                                              MediaQuery.of(
+                                                context,
+                                              ).size.width -
+                                              32,
+                                          child: _StartReadingDialogContent(
+                                            book: book,
+                                            onClickStartReading:
+                                                (double progress) {
+                                                  Navigator.of(context).pop();
+                                                },
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -169,30 +182,55 @@ class _BookDetailsContent extends StatelessWidget {
 
 class _StartReadingDialogContent extends StatelessWidget {
   final BookDetailsUI book;
+  final TextEditingController _controller = TextEditingController();
   final Function(double) onClickStartReading;
 
-  const _StartReadingDialogContent({
+  _StartReadingDialogContent({
     required this.book,
     required this.onClickStartReading,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        if (book.thumbnail != null)
-          CachedNetworkImage(imageUrl: book.thumbnail!),
-        const SizedBox(height: 16),
-        Text(
-          book.title,
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Align(
+            alignment: Alignment.topLeft,
+            child: IconButton(
+              icon: const Icon(Icons.close),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
           ),
-        ),
-        const SizedBox(height: 8),
-      ],
+          if (book.thumbnail != null)
+            CachedNetworkImage(imageUrl: book.thumbnail!),
+          const SizedBox(height: 16),
+          Text(
+            book.title,
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text('Maximum pages: ${book.pageCount}'),
+          const SizedBox(height: 24),
+          InputField(
+            keyboardType: TextInputType.number,
+            label: progress,
+            controller: _controller,
+            onChanged: (_) {},
+            prefixText: '$page ',
+          ),
+          const SizedBox(height: 24),
+          PrimaryButton(
+            title: confirm,
+            onPressed: () {},
+          ),
+        ],
+      ),
     );
   }
 }

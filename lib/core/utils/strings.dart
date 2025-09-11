@@ -3,3 +3,7 @@ const search = 'Search';
 const objectives = 'Objectives';
 const searchBooks = 'Search Books';
 const startReading = 'Start Reading';
+const percent = '%';
+const page = 'Page';
+const progress = 'Progress';
+const confirm = 'Confirm';
