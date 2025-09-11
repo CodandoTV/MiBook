@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
+import 'package:injectable/injectable.dart';
 import 'package:mibook/layers/data/models/reading_data.dart';
 
 const _readingListKey = 'reading_list';
@@ -12,6 +13,7 @@ abstract class IReadingDataSource {
   Future<List<ReadingData>> getReadingData();
 }
 
+@Injectable(as: IReadingDataSource)
 class ReadingDataSource implements IReadingDataSource {
   final _storage = EncryptedSharedPreferences();
 

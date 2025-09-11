@@ -2,3 +2,4 @@ const home = 'Home';
 const search = 'Search';
 const objectives = 'Objectives';
 const searchBooks = 'Search Books';
+const startReading = 'Start Reading';

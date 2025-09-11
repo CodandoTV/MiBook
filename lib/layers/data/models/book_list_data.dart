@@ -64,6 +64,7 @@ class BookItem {
       authors: volumeInfo.authors,
       description: volumeInfo.description,
       thumbnail: volumeInfo.imageLinks?.thumbnail,
+      pageCount: volumeInfo.pageCount,
     );
   }
 }
@@ -78,7 +79,7 @@ class VolumeInfo {
   final String? description;
   final List<IndustryIdentifier>? industryIdentifiers;
   final ReadingModes? readingModes;
-  final int? pageCount;
+  final int pageCount;
   final String? printType;
   final List<String>? categories;
   final double? averageRating;
@@ -102,7 +103,7 @@ class VolumeInfo {
     this.description,
     this.industryIdentifiers,
     this.readingModes,
-    this.pageCount,
+    required this.pageCount,
     this.printType,
     this.categories,
     this.averageRating,

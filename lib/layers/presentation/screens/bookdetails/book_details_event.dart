@@ -5,4 +5,7 @@ class DidLoadEvent extends BookDetailsEvent {
   DidLoadEvent(this.bookId);
 }
 
-class DidClickStartReadingEvent extends BookDetailsEvent {}
+class DidClickStartReadingEvent extends BookDetailsEvent {
+  final double progress;
+  DidClickStartReadingEvent(this.progress);
+}

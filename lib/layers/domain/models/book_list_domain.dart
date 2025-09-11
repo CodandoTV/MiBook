@@ -15,6 +15,7 @@ class BookDomain {
   final List<String>? authors;
   final String? description;
   final String? thumbnail;
+  final int pageCount;
 
   BookDomain({
     required this.id,
@@ -23,5 +24,6 @@ class BookDomain {
     required this.authors,
     required this.description,
     required this.thumbnail,
+    required this.pageCount,
   });
 }
