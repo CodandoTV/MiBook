@@ -10,16 +10,20 @@ class BookDetailsState with _$BookDetailsState {
   final String? errorMessage;
   @override
   final BookDetailsUI? bookDetails;
+  @override
+  final double bookProgress;
 
   BookDetailsState(
     this.errorMessage,
     this.bookDetails, {
     required this.isLoading,
+    required this.bookProgress,
   });
 
   factory BookDetailsState.initial() => BookDetailsState(
     null,
     null,
     isLoading: false,
+    bookProgress: 0.0,
   );
 }

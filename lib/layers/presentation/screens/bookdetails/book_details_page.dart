@@ -4,21 +4,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:mibook/core/designsystem/molecules/buttons/primary_button.dart';
+import 'package:mibook/core/designsystem/molecules/indicators/progress_stepper.dart';
 import 'package:mibook/core/designsystem/molecules/inputfields/input_field.dart';
 import 'package:mibook/core/designsystem/organisms/app_nav_bar.dart';
 import 'package:mibook/core/designsystem/organisms/list_item.dart';
 import 'package:mibook/core/di/di.dart';
-import 'package:mibook/core/utils/strings.dart';
+import 'package:mibook/core/routes/app_router.gr.dart';
+import 'package:mibook/core/utils/strings.dart' as strings;
 import 'package:mibook/layers/presentation/screens/bookdetails/book_details_state.dart';
 import 'package:mibook/layers/presentation/screens/bookdetails/book_details_ui.dart';
 import 'package:mibook/layers/presentation/screens/bookdetails/book_details_view_model.dart';
 import 'package:mibook/layers/presentation/screens/bookdetails/book_details_event.dart';
 
 @RoutePage()
-class BoolDetailsPage extends StatelessWidget {
+class BookDetailsPage extends StatelessWidget {
   final String id;
 
-  const BoolDetailsPage({
+  const BookDetailsPage({
     super.key,
     required this.id,
   });
@@ -61,6 +63,7 @@ class _BookDetailsContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = context.read<BookDetailsViewModel>();
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -72,6 +75,8 @@ class _BookDetailsContent extends StatelessWidget {
                 return Center(child: Text('Error: ${state.errorMessage}'));
               } else if (state.bookDetails != null) {
                 final book = state.bookDetails!;
+                final bookProgress = state.bookProgress;
+
                 return Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
@@ -107,63 +112,14 @@ class _BookDetailsContent extends StatelessWidget {
                       ),
                       const SizedBox(height: 24),
                       PrimaryButton(
-                        title: startReading,
-                        onPressed: () => showGeneralDialog(
-                          context: context,
-                          barrierDismissible:
-                              true, // allows tap outside to close
-                          barrierLabel: "Dismiss",
-                          barrierColor: Colors.black54, // dim background
-                          transitionDuration: const Duration(milliseconds: 300),
-                          pageBuilder: (context, anim1, anim2) {
-                            // Must return a full-screen widget so barrier can detect taps
-                            return SafeArea(
-                              child: Builder(
-                                builder: (context) {
-                                  return Center(
-                                    child: Material(
-                                      color: Colors.transparent,
-                                      child: AlertDialog(
-                                        backgroundColor: Colors.white,
-                                        insetPadding:
-                                            EdgeInsets.zero, // remove margin
-                                        contentPadding: EdgeInsets
-                                            .zero, // remove inner padding if needed
-                                        content: SizedBox(
-                                          width:
-                                              MediaQuery.of(
-                                                context,
-                                              ).size.width -
-                                              32,
-                                          child: _StartReadingDialogContent(
-                                            book: book,
-                                            onClickStartReading:
-                                                (double progress) {
-                                                  Navigator.of(context).pop();
-                                                },
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
+                        title: strings.startReading,
+                        onPressed: () {
+                          if (state.bookDetails != null) {
+                            context.router.push(
+                              StartReadingRoute(book: state.bookDetails!),
                             );
-                          },
-                          transitionBuilder: (context, anim1, anim2, child) {
-                            // Slide + fade
-                            return SlideTransition(
-                              position: Tween(
-                                begin: const Offset(0, 0.2), // from bottom
-                                end: Offset.zero,
-                              ).animate(anim1),
-                              child: FadeTransition(
-                                opacity: anim1,
-                                child: child,
-                              ),
-                            );
-                          },
-                        ),
+                          }
+                        },
                       ),
                       const SizedBox(height: 32),
                     ],
@@ -182,16 +138,21 @@ class _BookDetailsContent extends StatelessWidget {
 
 class _StartReadingDialogContent extends StatelessWidget {
   final BookDetailsUI book;
+  final double progress;
   final TextEditingController _controller = TextEditingController();
+  final Function(String) onChangeProgressText;
   final Function(double) onClickStartReading;
 
   _StartReadingDialogContent({
     required this.book,
+    required this.progress,
+    required this.onChangeProgressText,
     required this.onClickStartReading,
   });
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('Progress $progress');
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -219,14 +180,15 @@ class _StartReadingDialogContent extends StatelessWidget {
           const SizedBox(height: 24),
           InputField(
             keyboardType: TextInputType.number,
-            label: progress,
+            label: strings.progress,
             controller: _controller,
-            onChanged: (_) {},
-            prefixText: '$page ',
+            onChanged: onChangeProgressText,
           ),
           const SizedBox(height: 24),
+          ProgressStepper(progress: progress),
+          const SizedBox(height: 24),
           PrimaryButton(
-            title: confirm,
+            title: strings.confirm,
             onPressed: () {},
           ),
         ],

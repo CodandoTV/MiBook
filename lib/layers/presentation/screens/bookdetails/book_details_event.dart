@@ -9,3 +9,8 @@ class DidClickStartReadingEvent extends BookDetailsEvent {
   final double progress;
   DidClickStartReadingEvent(this.progress);
 }
+
+class DidChangeProgressTextEvent extends BookDetailsEvent {
+  final int progress;
+  DidChangeProgressTextEvent(this.progress);
+}

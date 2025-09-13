@@ -8,7 +8,7 @@ part of 'book_list_data.dart';
 
 BookListData _$BookListDataFromJson(Map<String, dynamic> json) => BookListData(
   kind: json['kind'] as String,
-  totalItems: (json['totalItems'] as num).toInt(),
+  totalItems: (json['totalItems'] as num?)?.toInt(),
   items:
       (json['items'] as List<dynamic>?)
           ?.map((e) => BookItem.fromJson(e as Map<String, dynamic>))
@@ -62,7 +62,7 @@ VolumeInfo _$VolumeInfoFromJson(Map<String, dynamic> json) => VolumeInfo(
   readingModes: json['readingModes'] == null
       ? null
       : ReadingModes.fromJson(json['readingModes'] as Map<String, dynamic>),
-  pageCount: (json['pageCount'] as num).toInt(),
+  pageCount: (json['pageCount'] as num?)?.toInt(),
   printType: json['printType'] as String?,
   categories: (json['categories'] as List<dynamic>?)
       ?.map((e) => e as String)
@@ -190,7 +190,7 @@ Map<String, dynamic> _$PriceToJson(Price instance) => <String, dynamic>{
 };
 
 Offer _$OfferFromJson(Map<String, dynamic> json) => Offer(
-  finskyOfferType: (json['finskyOfferType'] as num).toInt(),
+  finskyOfferType: (json['finskyOfferType'] as num?)?.toInt(),
   listPrice: json['listPrice'] == null
       ? null
       : Price.fromJson(json['listPrice'] as Map<String, dynamic>),

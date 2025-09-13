@@ -7,3 +7,5 @@ const percent = '%';
 const page = 'Page';
 const progress = 'Progress';
 const confirm = 'Confirm';
+const progressErrorMessage = 'You can t enter more pages than the book maximum';
+const zero = '0';

@@ -27,10 +27,14 @@ import 'package:mibook/layers/domain/repository/search_repository.dart'
 import 'package:mibook/layers/domain/usecases/get_book_details.dart' as _i814;
 import 'package:mibook/layers/domain/usecases/search_books.dart' as _i663;
 import 'package:mibook/layers/domain/usecases/start_reading.dart' as _i369;
+import 'package:mibook/layers/presentation/screens/bookdetails/book_details_ui.dart'
+    as _i66;
 import 'package:mibook/layers/presentation/screens/bookdetails/book_details_view_model.dart'
     as _i46;
 import 'package:mibook/layers/presentation/screens/booksearch/book_search_view_model.dart'
     as _i688;
+import 'package:mibook/layers/presentation/screens/startreading/start_reading_view_model.dart'
+    as _i35;
 
 extension GetItInjectableX on _i174.GetIt {
   // initializes the registration of main-scope dependencies inside of GetIt
@@ -68,6 +72,9 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i369.IStartReading>(),
         bookId,
       ),
+    );
+    gh.factoryParam<_i35.StartReadingViewModel, _i66.BookDetailsUI, dynamic>(
+      (book, _) => _i35.StartReadingViewModel(gh<_i369.IStartReading>(), book),
     );
     gh.factory<_i688.BookSearchViewModel>(
       () => _i688.BookSearchViewModel(gh<_i663.ISearchBooks>()),

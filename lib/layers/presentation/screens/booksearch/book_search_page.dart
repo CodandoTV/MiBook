@@ -110,7 +110,7 @@ class _SearchScaffold extends StatelessWidget {
                           ),
                           child: ListItem(
                             onTap: () => context.router.push(
-                              BoolDetailsRoute(id: book.id),
+                              BookDetailsRoute(id: book.id),
                             ),
                             input: BookItemInput(
                               id: book.id,

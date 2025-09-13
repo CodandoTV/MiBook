@@ -8,6 +8,7 @@ class InputField extends StatelessWidget {
   final String placeholder;
   final String? suffixText;
   final String? prefixText;
+  final String? errorMessage;
   final TextInputType? keyboardType;
   final Function(String) onChanged;
 
@@ -19,6 +20,7 @@ class InputField extends StatelessWidget {
     this.placeholder = '',
     this.suffixText,
     this.prefixText,
+    this.errorMessage,
     this.keyboardType,
     required this.onChanged,
   });
@@ -39,8 +41,13 @@ class InputField extends StatelessWidget {
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: onBorder),
               ),
+              errorBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: error),
+              ),
+              hintText: placeholder,
               suffixText: suffixText,
               prefixText: prefixText,
+              errorText: errorMessage,
             ),
             onChanged: onChanged,
           ),

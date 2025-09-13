@@ -43,6 +43,13 @@ class BookDetailsViewModel extends Bloc<BookDetailsEvent, BookDetailsState> {
       }
     });
     on<DidClickStartReadingEvent>((event, emit) async {});
+    on<DidChangeProgressTextEvent>((event, emit) {
+      final pageCount = state.bookDetails?.pageCount;
+      if (pageCount != null) {
+        final progress = event.progress.toDouble() / pageCount.toDouble();
+        emit(state.copyWith(bookProgress: progress));
+      }
+    });
   }
 
   Future<BookDetailsUI?> loadBookDetails() async {
