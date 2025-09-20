@@ -20,7 +20,7 @@ void main() {
   });
 
   group('GetBookDetails', () {
-    test('searchById returns BookDetails on success', () async {
+    test('call returns BookDetails on success', () async {
       when(
         mockSearchRepository.searchById(
           id: 'id',
@@ -31,7 +31,7 @@ void main() {
       expect(result, fakeBookDomain);
     });
 
-    test('searchById returns BookDetails on failure', () async {
+    test('call returns BookDetails on failure', () async {
       when(
         mockSearchRepository.searchById(
           id: 'id',
