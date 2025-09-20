@@ -169,3 +169,4 @@ app.*.symbols
 *.g.dart
 */di.config.dart
 *.mocks.dart
+lib/core/di/di.config.dart
