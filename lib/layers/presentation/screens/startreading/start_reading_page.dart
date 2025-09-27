@@ -3,7 +3,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mibook/core/designsystem/molecules/buttons/primary_button.dart';
+import 'package:mibook/core/designsystem/molecules/buttons/secondary_button.dart';
 import 'package:mibook/core/designsystem/molecules/indicators/progress_stepper.dart';
+import 'package:mibook/core/designsystem/molecules/indicators/radio_box.dart';
 import 'package:mibook/core/designsystem/molecules/inputfields/input_field.dart';
 import 'package:mibook/core/designsystem/organisms/app_nav_bar.dart';
 import 'package:mibook/core/di/di.dart';
@@ -43,6 +45,9 @@ class _StartReadingScaffold extends StatelessWidget {
       body: BlocBuilder<StartReadingViewModel, StartReadingState>(
         builder: (context, state) {
           final viewModel = context.read<StartReadingViewModel>();
+          if (state.shouldNavigateBack) {
+            context.router.maybePop();
+          }
           return _StartReadingContent(
             book: viewModel.book,
             progress: state.progress,
@@ -54,6 +59,9 @@ class _StartReadingScaffold extends StatelessWidget {
             },
             onClickStartReading: () {
               viewModel.add(DidClickConfirmEvent());
+            },
+            onClickFinishBook: () {
+              viewModel.add(DidClickFinishBookEvent());
             },
           );
         },
@@ -69,6 +77,7 @@ class _StartReadingContent extends StatelessWidget {
   final TextEditingController _controller = TextEditingController();
   final Function(String) onChangeProgressText;
   final Function onClickStartReading;
+  final Function onClickFinishBook;
 
   _StartReadingContent({
     required this.book,
@@ -76,6 +85,7 @@ class _StartReadingContent extends StatelessWidget {
     required this.errorMessage,
     required this.onChangeProgressText,
     required this.onClickStartReading,
+    required this.onClickFinishBook,
   });
 
   @override
@@ -108,11 +118,23 @@ class _StartReadingContent extends StatelessWidget {
           ),
           const SizedBox(height: 24),
           ProgressStepper(progress: progress),
+          const SizedBox(
+            height: 24,
+          ),
           const Spacer(),
           PrimaryButton(
             title: strings.confirm,
+            isEnabled: errorMessage == null,
             isExpanded: true,
-            onPressed: () {},
+            onPressed: onClickStartReading as VoidCallback,
+          ),
+          const SizedBox(
+            height: 16,
+          ),
+          SecondaryButton(
+            title: finishBook,
+            isExpanded: true,
+            onPressed: onClickFinishBook as VoidCallback,
           ),
         ],
       ),

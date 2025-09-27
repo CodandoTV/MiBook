@@ -6,3 +6,5 @@ class DidEditProgressEvent extends StartReadingEvent {
 }
 
 class DidClickConfirmEvent extends StartReadingEvent {}
+
+class DidClickFinishBookEvent extends StartReadingEvent {}

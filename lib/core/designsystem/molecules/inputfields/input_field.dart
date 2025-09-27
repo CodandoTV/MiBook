@@ -30,27 +30,34 @@ class InputField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (label.isNotEmpty) Text(label),
-        const SizedBox(height: 8),
-        SizedBox(
-          height: 48,
-          child: TextField(
-            keyboardType: keyboardType,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: onBorder),
-              ),
-              errorBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: error),
-              ),
-              hintText: placeholder,
-              suffixText: suffixText,
-              prefixText: prefixText,
-              errorText: errorMessage,
+        if (label.isNotEmpty)
+          Text(
+            label,
+            style: TextStyle(
+              color: errorMessage == null ? primaryText : error,
             ),
-            onChanged: onChanged,
           ),
+        const SizedBox(height: 8),
+        TextField(
+          keyboardType: keyboardType,
+          decoration: InputDecoration(
+            border: OutlineInputBorder(),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: onBorder),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: error),
+            ),
+            hintText: placeholder,
+            suffixText: suffixText,
+            prefixText: prefixText,
+            errorText: errorMessage,
+            contentPadding: const EdgeInsets.symmetric(
+              vertical: 16, // controls height
+              horizontal: 16,
+            ),
+          ),
+          onChanged: onChanged,
         ),
       ],
     );
