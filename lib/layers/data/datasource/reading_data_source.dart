@@ -15,7 +15,9 @@ abstract class IReadingDataSource {
 
 @Injectable(as: IReadingDataSource)
 class ReadingDataSource implements IReadingDataSource {
-  final _storage = EncryptedSharedPreferences();
+  final EncryptedSharedPreferences _storage;
+
+  ReadingDataSource(this._storage);
 
   @override
   Future<void> startReading({

@@ -9,19 +9,18 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart'
+    as _i847;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
+import 'package:mibook/core/di/app_module.dart' as _i516;
 import 'package:mibook/layers/data/api/api_client.dart' as _i721;
 import 'package:mibook/layers/data/datasource/reading_data_source.dart' as _i44;
 import 'package:mibook/layers/data/datasource/search_data_source.dart' as _i400;
-<<<<<<< HEAD
-import 'package:mibook/layers/data/repository/search_repository.dart' as _i967;
-=======
 import 'package:mibook/layers/data/repository/reading_repository.dart' as _i600;
 import 'package:mibook/layers/data/repository/search_repository.dart' as _i967;
 import 'package:mibook/layers/domain/repository/reading_repository.dart'
     as _i649;
->>>>>>> 7741511 ([feat](pnalvarez): displaying start reading dialog)
 import 'package:mibook/layers/domain/repository/search_repository.dart'
     as _i303;
 import 'package:mibook/layers/domain/usecases/get_book_details.dart' as _i814;
@@ -43,8 +42,14 @@ extension GetItInjectableX on _i174.GetIt {
     _i526.EnvironmentFilter? environmentFilter,
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
+    final appModule = _$AppModule();
+    gh.lazySingleton<_i847.EncryptedSharedPreferences>(
+      () => appModule.encryptedSharedPreferences,
+    );
     gh.factory<_i721.IApiClient>(() => _i721.ApiClient());
-    gh.factory<_i44.IReadingDataSource>(() => _i44.ReadingDataSource());
+    gh.factory<_i44.IReadingDataSource>(
+      () => _i44.ReadingDataSource(gh<_i847.EncryptedSharedPreferences>()),
+    );
     gh.factory<_i400.ISearchDataSource>(
       () => _i400.SearchDataSource(gh<_i721.IApiClient>()),
     );
@@ -53,12 +58,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i303.ISearchRepository>(
       () => _i967.SearchRepository(gh<_i400.ISearchDataSource>()),
-<<<<<<< HEAD
-=======
     );
     gh.factory<_i369.IStartReading>(
       () => _i369.StartReading(gh<_i649.IReadingRepository>()),
->>>>>>> 7741511 ([feat](pnalvarez): displaying start reading dialog)
     );
     gh.factory<_i663.ISearchBooks>(
       () => _i663.SearchBooks(gh<_i303.ISearchRepository>()),
@@ -82,3 +84,5 @@ extension GetItInjectableX on _i174.GetIt {
     return this;
   }
 }
+
+class _$AppModule extends _i516.AppModule {}

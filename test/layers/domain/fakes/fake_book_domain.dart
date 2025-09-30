@@ -7,4 +7,5 @@ final fakeBookDomain = BookDomain(
   thumbnail: 'thumbnail',
   authors: [],
   kind: 'kind',
+  pageCount: 0,
 );
