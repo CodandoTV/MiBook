@@ -63,7 +63,6 @@ class _BookDetailsContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = context.read<BookDetailsViewModel>();
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -75,7 +74,6 @@ class _BookDetailsContent extends StatelessWidget {
                 return Center(child: Text('Error: ${state.errorMessage}'));
               } else if (state.bookDetails != null) {
                 final book = state.bookDetails!;
-                final bookProgress = state.bookProgress;
 
                 return Padding(
                   padding: const EdgeInsets.all(16.0),
@@ -129,67 +127,6 @@ class _BookDetailsContent extends StatelessWidget {
                 return const Center(child: Text('No data available.'));
               }
             },
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _StartReadingDialogContent extends StatelessWidget {
-  final BookDetailsUI book;
-  final double progress;
-  final TextEditingController _controller = TextEditingController();
-  final Function(String) onChangeProgressText;
-  final Function(double) onClickStartReading;
-
-  _StartReadingDialogContent({
-    required this.book,
-    required this.progress,
-    required this.onChangeProgressText,
-    required this.onClickStartReading,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    debugPrint('Progress $progress');
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Align(
-            alignment: Alignment.topLeft,
-            child: IconButton(
-              icon: const Icon(Icons.close),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-          ),
-          if (book.thumbnail != null)
-            CachedNetworkImage(imageUrl: book.thumbnail!),
-          const SizedBox(height: 16),
-          Text(
-            book.title,
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text('Maximum pages: ${book.pageCount}'),
-          const SizedBox(height: 24),
-          InputField(
-            keyboardType: TextInputType.number,
-            label: strings.progress,
-            controller: _controller,
-            onChanged: onChangeProgressText,
-          ),
-          const SizedBox(height: 24),
-          ProgressStepper(progress: progress),
-          const SizedBox(height: 24),
-          PrimaryButton(
-            title: strings.confirm,
-            onPressed: () {},
           ),
         ],
       ),
