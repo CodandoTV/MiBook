@@ -1,4 +1,3 @@
-import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mibook/layers/data/models/reading_data.dart';
 
