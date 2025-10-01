@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mibook/core/designsystem/molecules/buttons/primary_button.dart';
 import 'package:mibook/core/designsystem/molecules/buttons/secondary_button.dart';
 import 'package:mibook/core/designsystem/molecules/indicators/progress_stepper.dart';
-import 'package:mibook/core/designsystem/molecules/indicators/radio_box.dart';
 import 'package:mibook/core/designsystem/molecules/inputfields/input_field.dart';
 import 'package:mibook/core/designsystem/organisms/app_nav_bar.dart';
 import 'package:mibook/core/di/di.dart';

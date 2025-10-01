@@ -4,15 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:mibook/core/designsystem/molecules/buttons/primary_button.dart';
-import 'package:mibook/core/designsystem/molecules/indicators/progress_stepper.dart';
-import 'package:mibook/core/designsystem/molecules/inputfields/input_field.dart';
 import 'package:mibook/core/designsystem/organisms/app_nav_bar.dart';
 import 'package:mibook/core/designsystem/organisms/list_item.dart';
 import 'package:mibook/core/di/di.dart';
 import 'package:mibook/core/routes/app_router.gr.dart';
 import 'package:mibook/core/utils/strings.dart' as strings;
 import 'package:mibook/layers/presentation/screens/bookdetails/book_details_state.dart';
-import 'package:mibook/layers/presentation/screens/bookdetails/book_details_ui.dart';
 import 'package:mibook/layers/presentation/screens/bookdetails/book_details_view_model.dart';
 import 'package:mibook/layers/presentation/screens/bookdetails/book_details_event.dart';
 
