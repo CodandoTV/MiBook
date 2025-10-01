@@ -24,7 +24,10 @@ class BookListData {
   BookListDomain toDomain() {
     return BookListDomain(
       totalItems: totalItems ?? 0,
-      books: items.map((item) => item.toDomain()).toList(),
+      books: items
+          .where((item) => item.volumeInfo.pageCount != null)
+          .map((item) => item.toDomain())
+          .toList(),
     );
   }
 }
