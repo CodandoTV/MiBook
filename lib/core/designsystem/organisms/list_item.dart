@@ -73,11 +73,13 @@ class GenericInput extends ListItemInput {
 
 class ListItem extends StatelessWidget {
   final ListItemInput input;
+  final bool isExpanded;
   final Function()? onTap;
 
   const ListItem({
     super.key,
     required this.input,
+    this.isExpanded = false,
     this.onTap,
   });
 
@@ -86,6 +88,7 @@ class ListItem extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
+        width: isExpanded ? double.infinity : null,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           color: onBackground,

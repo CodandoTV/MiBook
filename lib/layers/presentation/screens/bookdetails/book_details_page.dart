@@ -1,18 +1,23 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:mibook/core/designsystem/molecules/buttons/primary_button.dart';
 import 'package:mibook/core/designsystem/organisms/app_nav_bar.dart';
+import 'package:mibook/core/designsystem/organisms/list_item.dart';
 import 'package:mibook/core/di/di.dart';
+import 'package:mibook/core/routes/app_router.gr.dart';
+import 'package:mibook/core/utils/strings.dart' as strings;
 import 'package:mibook/layers/presentation/screens/bookdetails/book_details_state.dart';
 import 'package:mibook/layers/presentation/screens/bookdetails/book_details_view_model.dart';
 import 'package:mibook/layers/presentation/screens/bookdetails/book_details_event.dart';
 
 @RoutePage()
-class BoolDetailsPage extends StatelessWidget {
+class BookDetailsPage extends StatelessWidget {
   final String id;
 
-  const BoolDetailsPage({
+  const BookDetailsPage({
     super.key,
     required this.id,
   });
@@ -66,29 +71,52 @@ class _BookDetailsContent extends StatelessWidget {
                 return Center(child: Text('Error: ${state.errorMessage}'));
               } else if (state.bookDetails != null) {
                 final book = state.bookDetails!;
+
                 return Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       if (book.thumbnail != null)
-                        Image.network(book.thumbnail!),
+                        CachedNetworkImage(imageUrl: book.thumbnail!),
                       const SizedBox(height: 16),
-                      Text(
-                        book.title,
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
+                      ListItem(
+                        isExpanded: true,
+                        input: GenericInput(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                book.title,
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              if (book.authors.isNotEmpty)
+                                Text(
+                                  'By ${book.authors}',
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
+                              const SizedBox(height: 16),
+                              Html(data: book.description),
+                            ],
+                          ),
                         ),
                       ),
-                      const SizedBox(height: 8),
-                      if (book.authors.isNotEmpty)
-                        Text(
-                          'By ${book.authors}',
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                      const SizedBox(height: 16),
-                      Html(data: book.description),
+                      const SizedBox(height: 24),
+                      PrimaryButton(
+                        title: strings.startReading,
+                        onPressed: () {
+                          if (state.bookDetails != null) {
+                            context.router.push(
+                              StartReadingRoute(book: state.bookDetails!),
+                            );
+                          }
+                        },
+                      ),
+                      const SizedBox(height: 32),
                     ],
                   ),
                 );

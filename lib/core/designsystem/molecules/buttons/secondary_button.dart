@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:mibook/core/designsystem/atoms/colors.dart';
 
-class PrimaryButton extends StatelessWidget {
+class SecondaryButton extends StatelessWidget {
   final String title;
   final bool isEnabled;
   final bool isExpanded;
   final bool isLoading;
   final VoidCallback onPressed;
 
-  const PrimaryButton({
+  const SecondaryButton({
     super.key,
     required this.title,
     this.isEnabled = true,
@@ -22,13 +22,22 @@ class PrimaryButton extends StatelessWidget {
     return SizedBox(
       height: 48,
       width: isExpanded ? double.infinity : null,
-      child: ElevatedButton(
+      child: OutlinedButton(
         onPressed: isEnabled ? onPressed : null,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: isEnabled ? primary : disabled,
-          foregroundColor: Colors.white,
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+        style: OutlinedButton.styleFrom(
+          side: BorderSide(
+            color: isEnabled ? primary : disabled,
+            width: 1.0,
+          ),
+          foregroundColor: isEnabled ? primary : disabled,
+          padding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 12,
+          ),
+          textStyle: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+          ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),

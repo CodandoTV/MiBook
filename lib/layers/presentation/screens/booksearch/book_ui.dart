@@ -7,6 +7,7 @@ class BookUI {
   final String authors;
   final String description;
   final String? thumbnail;
+  final int pageCount;
 
   BookUI({
     required this.id,
@@ -15,6 +16,7 @@ class BookUI {
     required this.authors,
     required this.description,
     required this.thumbnail,
+    required this.pageCount,
   });
 
   factory BookUI.fromDomain(BookDomain domain) {
@@ -25,6 +27,7 @@ class BookUI {
       authors: (domain.authors ?? []).join(', '),
       description: domain.description ?? '',
       thumbnail: domain.thumbnail,
+      pageCount: domain.pageCount,
     );
   }
 }

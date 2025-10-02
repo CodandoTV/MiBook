@@ -30,6 +30,8 @@ dependencies:
   mockito: ^5.4.6
   shimmer: ^3.0.0
   flutter_html: ^3.0.0
+  shared_preferences: ^2.5.3
+  auto_size_text: ^3.0.0
 
 dev_dependencies:
   flutter_test:

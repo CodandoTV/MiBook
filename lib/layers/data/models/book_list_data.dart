@@ -6,7 +6,7 @@ part 'book_list_data.g.dart';
 @JsonSerializable()
 class BookListData {
   final String kind;
-  final int totalItems;
+  final int? totalItems;
   @JsonKey(defaultValue: [])
   final List<BookItem> items;
 
@@ -23,8 +23,11 @@ class BookListData {
 
   BookListDomain toDomain() {
     return BookListDomain(
-      totalItems: totalItems,
-      books: items.map((item) => item.toDomain()).toList(),
+      totalItems: totalItems ?? 0,
+      books: items
+          .where((item) => item.volumeInfo.pageCount != null)
+          .map((item) => item.toDomain())
+          .toList(),
     );
   }
 }
@@ -64,6 +67,7 @@ class BookItem {
       authors: volumeInfo.authors,
       description: volumeInfo.description,
       thumbnail: volumeInfo.imageLinks?.thumbnail,
+      pageCount: volumeInfo.pageCount ?? 100,
     );
   }
 }
@@ -102,7 +106,7 @@ class VolumeInfo {
     this.description,
     this.industryIdentifiers,
     this.readingModes,
-    this.pageCount,
+    required this.pageCount,
     this.printType,
     this.categories,
     this.averageRating,
@@ -233,7 +237,7 @@ class Price {
 
 @JsonSerializable()
 class Offer {
-  final int finskyOfferType;
+  final int? finskyOfferType;
   final Price? listPrice;
   final Price? retailPrice;
   final bool? giftable;

@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:mibook/core/designsystem/modifiers/display_as_loader.dart';
 
@@ -65,12 +66,19 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
   Widget _title() {
     return DisplayAsLoader(
       isLoading: isTitleLoading,
-      child: Text(
-        titleText,
-        style: TextStyle(
-          color: Colors.black,
-          fontSize: titleText.length > 20 ? 14 : 22,
-          fontWeight: FontWeight.bold,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 250),
+        child: AutoSizeText(
+          titleText,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+          ),
+          minFontSize: 12,
+          stepGranularity: 1,
         ),
       ),
     );
