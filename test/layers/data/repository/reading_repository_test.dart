@@ -22,8 +22,17 @@ void main() {
     setUp();
 
     test('startReading', () async {
-      final readingDomain = ReadingDomain(bookId: 'id1', progress: 0.5);
-      final readingData = ReadingData(bookId: 'id1', progress: 0.5);
+      final readingDomain = ReadingDomain(
+        bookId: 'id1',
+        bookName: 'Harry Potter',
+        progress: 0.5,
+      );
+      final readingData = ReadingData(
+        'id1',
+        'Harry Potter',
+        null,
+        0.5,
+      );
 
       await sut.startReading(reading: readingDomain);
 
@@ -44,13 +53,13 @@ void main() {
 
   test('getReadings', () async {
     final fakeData = [
-      ReadingData(bookId: 'id1', progress: 0.5),
-      ReadingData(bookId: 'id2', progress: 0.5),
+      ReadingData('id1', 'Harry Potter', null, 0.5),
+      ReadingData('id2', 'Deltora Quest', null, 0.5),
     ];
 
     when(
       mockIReadingDataSource.getReadingData(),
-    ).thenAnswer((_) async => fakeData);
+    ).thenReturn(fakeData);
 
     final response = await sut.getReadings();
 

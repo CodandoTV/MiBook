@@ -56,7 +56,12 @@ class StartReadingViewModel extends Bloc<StartReadingEvent, StartReadingState> {
       _handleStartReading(1.0);
 
   Future<StartReadingState> _handleStartReading(double progress) async {
-    final reading = ReadingDomain(bookId: book.id, progress: progress);
+    final reading = ReadingDomain(
+      bookId: book.id,
+      bookName: book.title,
+      bookThumb: book.thumbnail,
+      progress: progress,
+    );
     await _startReading(reading: reading);
     return state.copyWith(shouldNavigateBack: true);
   }

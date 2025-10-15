@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:mibook/core/routes/app_router.dart';
 import 'package:mibook/core/di/di.dart';
+import 'package:mibook/layers/data/api/storage_client.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   configureDependencies();
+  await getIt.get<IStorageClient>().initLocalDataSource();
   runApp(CoreApplication());
 }
 

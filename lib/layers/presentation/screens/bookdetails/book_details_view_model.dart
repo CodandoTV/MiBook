@@ -66,6 +66,8 @@ class BookDetailsViewModel extends Bloc<BookDetailsEvent, BookDetailsState> {
       await _startReading(
         reading: ReadingDomain(
           bookId: bookId!,
+          bookName: state.bookDetails?.title ?? '',
+          bookThumb: state.bookDetails?.thumbnail ?? '',
           progress: progress,
         ),
       );

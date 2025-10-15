@@ -1,14 +1,14 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mibook/layers/domain/repository/search_repository.dart';
 import 'package:mibook/layers/domain/usecases/search_books.dart';
+import 'package:mibook/layers/domain/usecases/start_reading.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
 import 'fakes/fake_book_list_domain.dart';
-
-@GenerateNiceMocks([MockSpec<ISearchRepository>()])
 import 'search_books_test.mocks.dart';
 
+@GenerateNiceMocks([MockSpec<ISearchRepository>(), MockSpec<IStartReading>()])
 void main() {
   late MockISearchRepository mockSearchRepository;
   late SearchBooks searchBooks;

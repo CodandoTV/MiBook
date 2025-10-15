@@ -15,15 +15,17 @@ class ReadingRepository implements IReadingRepository {
     required ReadingDomain reading,
   }) async {
     final data = ReadingData(
-      bookId: reading.bookId,
-      progress: reading.progress,
+      reading.bookId,
+      reading.bookName,
+      reading.bookThumb,
+      reading.progress,
     );
     await _dataSource.startReading(readingData: data);
   }
 
   @override
-  Future<List<ReadingDomain>> getReadings() async {
-    final data = await _dataSource.getReadingData();
-    return data.map((e) => e.toDomain()).toList();
+  List<ReadingDomain> getReadings() {
+    final data = _dataSource.getReadingData();
+    return data.map((e) => e.toDomainModel()).toList();
   }
 }
