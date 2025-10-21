@@ -1,9 +1,7 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:injectable/injectable.dart';
-import 'package:mibook/core/di/box_builder.dart';
 import 'package:mibook/layers/data/models/reading_data.dart';
 
-const _appBoxName = 'AppBox';
 const _readingListInfo = 'ReadingList';
 
 abstract class IStorageClient {
@@ -16,12 +14,9 @@ abstract class IStorageClient {
 
 @LazySingleton(as: IStorageClient)
 class StorageClient implements IStorageClient {
-  final BoxBuilder _boxBuilder;
-  late Box _appBox;
+  final Box appBox;
 
-  StorageClient(this._boxBuilder) {
-    _boxBuilder.appBox.then((value) => _appBox = value);
-  }
+  StorageClient(this.appBox);
 
   @override
   Future initLocalDataSource() async {
@@ -32,7 +27,7 @@ class StorageClient implements IStorageClient {
 
   @override
   List<ReadingData> getReadingList() =>
-      _appBox.get(_readingListInfo, defaultValue: []);
+      appBox.get(_readingListInfo, defaultValue: []);
 
   @override
   Future<void> saveReading(ReadingData reading) {
@@ -40,12 +35,12 @@ class StorageClient implements IStorageClient {
     hiveList.add(reading);
 
     print('Reading saved: ${reading.bookName}');
-    return _appBox.put(_readingListInfo, hiveList);
+    return appBox.put(_readingListInfo, hiveList);
   }
 
   @override
-  Future<void> clearDB() => _appBox.clear();
+  Future<void> clearDB() => appBox.clear();
 
   @override
-  Future get(String key) => _appBox.get(key);
+  Future get(String key) => appBox.get(key);
 }
