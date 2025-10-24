@@ -1,11 +1,12 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:injectable/injectable.dart';
+import 'package:mibook/layers/data/api/custom_errors.dart';
 import 'package:mibook/layers/data/models/reading_data.dart';
+import 'package:mibook/layers/data/models/reading_list_data.dart';
 
 const _readingListInfo = 'ReadingList';
 
 abstract class IStorageClient {
-  Future initLocalDataSource();
   List<ReadingData> getReadingList();
   Future<void> saveReading(ReadingData reading);
   Future get(String key);
@@ -19,23 +20,24 @@ class StorageClient implements IStorageClient {
   StorageClient(this.appBox);
 
   @override
-  Future initLocalDataSource() async {
-    print('Init Datasource');
-    await Hive.initFlutter();
-    Hive.registerAdapter(ReadingDataAdapter());
-  }
+  List<ReadingData> getReadingList() {
+    ReadingListData readingListData = appBox.get(
+      _readingListInfo,
+      defaultValue: ReadingListData([]),
+    );
 
-  @override
-  List<ReadingData> getReadingList() =>
-      appBox.get(_readingListInfo, defaultValue: []);
+    return readingListData.list;
+  }
 
   @override
   Future<void> saveReading(ReadingData reading) {
     var hiveList = getReadingList();
+    if (hiveList.any((element) => element.bookId == reading.bookId)) {
+      throw DuplicatedReadingError();
+    }
     hiveList.add(reading);
-
-    print('Reading saved: ${reading.bookName}');
-    return appBox.put(_readingListInfo, hiveList);
+    final readingListData = ReadingListData(hiveList);
+    return appBox.put(_readingListInfo, readingListData);
   }
 
   @override

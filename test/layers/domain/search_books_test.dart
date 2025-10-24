@@ -24,8 +24,8 @@ void main() {
     test('call returns BookListDomain on success', () async {
       when(
         mockSearchRepository.searchByTitle(
-          initTitle: 'initTitle',
-          startIndex: 0,
+          initTitle: anyNamed('initTitle'),
+          startIndex: anyNamed('startIndex'),
         ),
       ).thenAnswer((_) async => Future.value(fakeBookListDomain));
 
@@ -33,29 +33,40 @@ void main() {
         initTitle: 'initTitle',
         startIndex: 0,
       );
+      verify(
+        mockSearchRepository.searchByTitle(
+          initTitle: anyNamed('initTitle'),
+          startIndex: anyNamed('startIndex'),
+        ),
+      ).called(1);
+
       expect(result, fakeBookListDomain);
     });
 
-    test('call returns BookListDomain on failure', () async {
-      when(
-        mockSearchRepository.searchByTitle(
-          initTitle: 'initTitle',
-          startIndex: 0,
-        ),
-      ).thenThrow(Exception('Something went wrong'));
+    test(
+      'call throws Exception with correct message when repository fails',
+      () async {
+        when(
+          mockSearchRepository.searchByTitle(
+            initTitle: 'initTitle',
+            startIndex: 0,
+          ),
+        ).thenThrow(Exception('Something went wrong'));
 
-      var error = false;
-      try {
-        await searchBooks.call(
-          initTitle: 'initTitle',
-          startIndex: 0,
+        expect(
+          () => searchBooks.call(
+            initTitle: 'initTitle',
+            startIndex: 0,
+          ),
+          throwsA(
+            isA<Exception>().having(
+              (e) => e.toString(),
+              'message',
+              contains('Something went wrong'),
+            ),
+          ),
         );
-        error = false;
-      } catch (e) {
-        error = true;
-      }
-
-      expect(error, isTrue);
-    });
+      },
+    );
   });
 }
