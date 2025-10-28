@@ -26,6 +26,9 @@ void main() {
         bookName: 'Harry Potter',
         progress: 0.5,
       );
+      // when(
+      //   mockIReadingRepository.startReading(reading: readingDomain),
+      // ).thenAnswer((_) async => Future.value);
       await sut(reading: readingDomain);
       verify(
         mockIReadingRepository.startReading(
