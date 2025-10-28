@@ -1,10 +1,11 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
-import 'package:json_annotation/json_annotation.dart';
 import 'package:mibook/layers/domain/models/reading_domain.dart';
 part 'reading_data.g.dart';
 
 @HiveType(typeId: 0)
 @JsonSerializable()
+@freezed
 class ReadingData extends HiveObject {
   @HiveField(0)
   String bookId;
@@ -40,4 +41,20 @@ class ReadingData extends HiveObject {
     bookThumb: bookThumb,
     progress: progress,
   );
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ReadingData &&
+          bookId == other.bookId &&
+          bookName == other.bookName &&
+          bookThumb == other.bookThumb &&
+          progress == other.progress;
+
+  @override
+  int get hashCode =>
+      bookId.hashCode ^
+      bookName.hashCode ^
+      bookThumb.hashCode ^
+      progress.hashCode;
 }
