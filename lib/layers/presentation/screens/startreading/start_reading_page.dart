@@ -7,6 +7,7 @@ import 'package:mibook/core/designsystem/molecules/buttons/secondary_button.dart
 import 'package:mibook/core/designsystem/molecules/indicators/progress_stepper.dart';
 import 'package:mibook/core/designsystem/molecules/inputfields/input_field.dart';
 import 'package:mibook/core/designsystem/organisms/app_nav_bar.dart';
+import 'package:mibook/core/designsystem/organisms/show_error_dialog.dart';
 import 'package:mibook/core/di/di.dart';
 import 'package:mibook/core/utils/strings.dart';
 import 'package:mibook/core/utils/strings.dart' as strings;
@@ -14,6 +15,9 @@ import 'package:mibook/layers/presentation/screens/bookdetails/book_details_ui.d
 import 'package:mibook/layers/presentation/screens/startreading/start_reading_event.dart';
 import 'package:mibook/layers/presentation/screens/startreading/start_reading_state.dart';
 import 'package:mibook/layers/presentation/screens/startreading/start_reading_view_model.dart';
+
+typedef _BlocListener = BlocListener<StartReadingViewModel, StartReadingState>;
+typedef _BlocBuilder = BlocBuilder<StartReadingViewModel, StartReadingState>;
 
 @RoutePage()
 class StartReadingPage extends StatelessWidget {
@@ -36,34 +40,57 @@ class StartReadingPage extends StatelessWidget {
 class _StartReadingScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppNavBar(
-        titleText: startReading,
-        onBack: context.router.maybePop,
-      ),
-      body: BlocBuilder<StartReadingViewModel, StartReadingState>(
-        builder: (context, state) {
-          final viewModel = context.read<StartReadingViewModel>();
-          if (state.shouldNavigateBack) {
-            context.router.maybePop();
-          }
-          return _StartReadingContent(
-            book: viewModel.book,
-            progress: state.progress,
-            errorMessage: state.inputErrorMessage,
-            onChangeProgressText: (progress) {
-              viewModel.add(
-                DidEditProgressEvent(progress: int.tryParse(progress) ?? 0),
-              );
-            },
-            onClickStartReading: () {
-              viewModel.add(DidClickConfirmEvent());
-            },
-            onClickFinishBook: () {
-              viewModel.add(DidClickFinishBookEvent());
+    final viewModel = context.read<StartReadingViewModel>();
+
+    return _BlocListener(
+      bloc: viewModel,
+      listenWhen: (previous, current) =>
+          previous.shouldShowSavingError != current.shouldShowSavingError &&
+          current.shouldShowSavingError,
+      listener: (context, state) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          showErrorDialog(
+            context,
+            'Error',
+            'An error occurred while saving your reading progress. Please try again.',
+            'OK',
+            () {
+              viewModel.add(DidClickSavingErrorDismissEvent());
             },
           );
-        },
+        });
+      },
+      child: Scaffold(
+        appBar: AppNavBar(
+          titleText: startReading,
+          onBack: context.router.maybePop,
+        ),
+        body: _BlocBuilder(
+          builder: (context, state) {
+            final viewModel = context.read<StartReadingViewModel>();
+            if (state.shouldNavigateBack) {
+              context.router.maybePop();
+            }
+            return _StartReadingContent(
+              book: viewModel.book,
+              progress: state.progress,
+              errorMessage: state.inputErrorMessage,
+              onChangeProgressText: (progress) {
+                viewModel.add(
+                  DidEditProgressEvent(
+                    progress: int.tryParse(progress) ?? 0,
+                  ),
+                );
+              },
+              onClickStartReading: () {
+                viewModel.add(DidClickConfirmEvent());
+              },
+              onClickFinishBook: () {
+                viewModel.add(DidClickFinishBookEvent());
+              },
+            );
+          },
+        ),
       ),
     );
   }

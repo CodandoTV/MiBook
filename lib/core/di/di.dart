@@ -5,6 +5,6 @@ import 'di.config.dart';
 final getIt = GetIt.instance;
 
 @InjectableInit()
-void configureDependencies() {
+Future<void> configureDependencies() async {
   getIt.init(environment: 'prod');
 }

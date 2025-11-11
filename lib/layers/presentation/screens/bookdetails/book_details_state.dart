@@ -4,26 +4,14 @@ part 'book_details_state.freezed.dart';
 
 @freezed
 class BookDetailsState with _$BookDetailsState {
-  @override
-  final bool isLoading;
-  @override
-  final String? errorMessage;
-  @override
-  final BookDetailsUI? bookDetails;
-  @override
-  final double bookProgress;
+  const factory BookDetailsState({
+    String? errorMessage,
+    BookDetailsUI? bookDetails,
+    @Default(false) bool isLoading,
+    @Default(0.0) double bookProgress,
+  }) = _BookDetailsState;
 
-  BookDetailsState(
-    this.errorMessage,
-    this.bookDetails, {
-    required this.isLoading,
-    required this.bookProgress,
-  });
+  const BookDetailsState._(); // allows adding custom getters or methods later
 
-  factory BookDetailsState.initial() => BookDetailsState(
-    null,
-    null,
-    isLoading: false,
-    bookProgress: 0.0,
-  );
+  factory BookDetailsState.initial() => const BookDetailsState();
 }

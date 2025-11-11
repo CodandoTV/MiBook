@@ -21,7 +21,11 @@ void main() {
     setUp();
 
     test('start', () async {
-      final readingDomain = ReadingDomain(bookId: 'id1', progress: 0.5);
+      final readingDomain = ReadingDomain(
+        bookId: 'id1',
+        bookName: 'Harry Potter',
+        progress: 0.5,
+      );
       // when(
       //   mockIReadingRepository.startReading(reading: readingDomain),
       // ).thenAnswer((_) async => Future.value);

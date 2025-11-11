@@ -4,7 +4,7 @@ import 'package:mibook/layers/data/models/reading_data.dart';
 import 'package:mibook/layers/domain/models/reading_domain.dart';
 import 'package:mibook/layers/domain/repository/reading_repository.dart';
 
-@Injectable(as: IReadingRepository)
+@Singleton(as: IReadingRepository)
 class ReadingRepository implements IReadingRepository {
   final IReadingDataSource _dataSource;
 
@@ -15,8 +15,10 @@ class ReadingRepository implements IReadingRepository {
     required ReadingDomain reading,
   }) async {
     final data = ReadingData(
-      bookId: reading.bookId,
-      progress: reading.progress,
+      reading.bookId,
+      reading.bookName,
+      reading.bookThumb,
+      reading.progress,
     );
     await _dataSource.startReading(readingData: data);
   }
@@ -24,6 +26,6 @@ class ReadingRepository implements IReadingRepository {
   @override
   Future<List<ReadingDomain>> getReadings() async {
     final data = await _dataSource.getReadingData();
-    return data.map((e) => e.toDomain()).toList();
+    return data.map((e) => e.toDomainModel()).toList();
   }
 }

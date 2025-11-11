@@ -15,7 +15,7 @@ class StartReadingViewModel extends Bloc<StartReadingEvent, StartReadingState> {
   StartReadingViewModel(
     this._startReading,
     @factoryParam this.book,
-  ) : super(StartReadingState.initial) {
+  ) : super(StartReadingState.initial()) {
     // Handle DidEditProgress Event
     on<DidEditProgressEvent>((event, emit) {
       emit(_didEditProgress(event));
@@ -28,6 +28,10 @@ class StartReadingViewModel extends Bloc<StartReadingEvent, StartReadingState> {
     // Handle DidFinishBook Event
     on<DidClickFinishBookEvent>((event, emit) async {
       final response = await _didClickFinishBook();
+      emit(response);
+    });
+    on<DidClickSavingErrorDismissEvent>((event, emit) {
+      final response = _handleDidClickSavingErrorDismiss();
       emit(response);
     });
   }
@@ -56,8 +60,21 @@ class StartReadingViewModel extends Bloc<StartReadingEvent, StartReadingState> {
       _handleStartReading(1.0);
 
   Future<StartReadingState> _handleStartReading(double progress) async {
-    final reading = ReadingDomain(bookId: book.id, progress: progress);
-    await _startReading(reading: reading);
-    return state.copyWith(shouldNavigateBack: true);
+    final reading = ReadingDomain(
+      bookId: book.id,
+      bookName: book.title,
+      bookThumb: book.thumbnail,
+      progress: progress,
+    );
+    try {
+      await _startReading(reading: reading);
+      return state.copyWith(shouldNavigateBack: true);
+    } catch (_) {
+      print('Error saving reading for bookId: ${book.id}');
+      return state.copyWith(shouldShowSavingError: true);
+    }
   }
+
+  StartReadingState _handleDidClickSavingErrorDismiss() =>
+      state.copyWith(shouldShowSavingError: false);
 }

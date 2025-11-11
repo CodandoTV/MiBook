@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:mibook/core/routes/app_router.dart';
 import 'package:mibook/core/di/di.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  configureDependencies();
+  await configureDependencies();
   runApp(CoreApplication());
 }
 
