@@ -7,6 +7,7 @@ Future<void> showErrorDialog(
   String title,
   String content,
   String ctaText,
+  Function()? onCtaPressed,
 ) {
   return showDialog<void>(
     context: context,
@@ -22,8 +23,11 @@ Future<void> showErrorDialog(
       actions: [
         Center(
           child: PrimaryButton(
-            title: title,
-            onPressed: () => Navigator.of(context).pop(),
+            title: ctaText,
+            onPressed: () {
+              onCtaPressed?.call();
+              Navigator.of(context).pop();
+            },
           ),
         ),
       ],

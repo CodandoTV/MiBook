@@ -30,6 +30,10 @@ class StartReadingViewModel extends Bloc<StartReadingEvent, StartReadingState> {
       final response = await _didClickFinishBook();
       emit(response);
     });
+    on<DidClickSavingErrorDismissEvent>((event, emit) {
+      final response = _handleDidClickSavingErrorDismiss();
+      emit(response);
+    });
   }
 
   // Event Handler to DidEditProgressEvent
@@ -62,7 +66,15 @@ class StartReadingViewModel extends Bloc<StartReadingEvent, StartReadingState> {
       bookThumb: book.thumbnail,
       progress: progress,
     );
-    await _startReading(reading: reading);
-    return state.copyWith(shouldNavigateBack: true);
+    try {
+      await _startReading(reading: reading);
+      return state.copyWith(shouldNavigateBack: true);
+    } catch (_) {
+      print('Error saving reading for bookId: ${book.id}');
+      return state.copyWith(shouldShowSavingError: true);
+    }
   }
+
+  StartReadingState _handleDidClickSavingErrorDismiss() =>
+      state.copyWith(shouldShowSavingError: false);
 }
