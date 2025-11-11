@@ -59,7 +59,7 @@ void main() {
 
     when(
       mockIReadingDataSource.getReadingData(),
-    ).thenReturn(fakeData);
+    ).thenAnswer((_) async => fakeData);
 
     final response = await sut.getReadings();
 

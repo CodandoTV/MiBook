@@ -1,20 +1,14 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:hive/hive.dart';
 import 'package:mibook/layers/domain/models/reading_domain.dart';
 part 'reading_data.g.dart';
 
-@HiveType(typeId: 0)
 @JsonSerializable()
 @freezed
-class ReadingData extends HiveObject {
-  @HiveField(0)
-  String bookId;
-  @HiveField(1)
-  String bookName;
-  @HiveField(2)
-  String? bookThumb;
-  @HiveField(3)
-  double progress;
+class ReadingData {
+  final String bookId;
+  final String bookName;
+  final String? bookThumb;
+  final double progress;
 
   ReadingData(
     this.bookId,

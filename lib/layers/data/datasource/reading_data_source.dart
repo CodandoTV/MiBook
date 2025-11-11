@@ -6,7 +6,7 @@ abstract class IReadingDataSource {
   Future<void> startReading({
     required ReadingData readingData,
   });
-  List<ReadingData> getReadingData();
+  Future<List<ReadingData>> getReadingData();
 }
 
 @Injectable(as: IReadingDataSource)
@@ -21,5 +21,6 @@ class ReadingDataSource implements IReadingDataSource {
   }) async => _storageClient.saveReading(readingData);
 
   @override
-  List<ReadingData> getReadingData() => _storageClient.getReadingList();
+  Future<List<ReadingData>> getReadingData() async =>
+      await _storageClient.getReadingList();
 }

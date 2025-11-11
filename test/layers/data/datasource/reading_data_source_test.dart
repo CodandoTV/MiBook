@@ -26,10 +26,10 @@ void main() {
       verify(storageClient.saveReading(fakeData)).called(1);
     });
 
-    test('getReadingList', () {
+    test('getReadingList', () async {
       final fakeData = [ReadingData('id', 'Harry Potter', 'image', 0.5)];
-      when(storageClient.getReadingList()).thenReturn(fakeData);
-      final result = sut.getReadingData();
+      when(storageClient.getReadingList()).thenAnswer((_) async => fakeData);
+      final result = await sut.getReadingData();
       verify(storageClient.getReadingList()).called(1);
       expect(result, fakeData);
     });

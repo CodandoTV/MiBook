@@ -1,48 +1,51 @@
-import 'package:hive_flutter/hive_flutter.dart';
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:injectable/injectable.dart';
 import 'package:mibook/layers/data/api/custom_errors.dart';
 import 'package:mibook/layers/data/models/reading_data.dart';
-import 'package:mibook/layers/data/models/reading_list_data.dart';
-
-const _readingListInfo = 'ReadingList';
+import 'package:path_provider/path_provider.dart';
 
 abstract class IStorageClient {
-  List<ReadingData> getReadingList();
-  Future<void> saveReading(ReadingData reading);
-  Future get(String key);
-  Future<void> clearDB();
+  Future<void> saveReading(ReadingData readingData);
+  Future<List<ReadingData>> getReadingList();
 }
 
-@LazySingleton(as: IStorageClient)
+@Singleton(as: IStorageClient)
 class StorageClient implements IStorageClient {
-  final Box appBox;
-
-  StorageClient(this.appBox);
-
-  @override
-  List<ReadingData> getReadingList() {
-    ReadingListData readingListData = appBox.get(
-      _readingListInfo,
-      defaultValue: ReadingListData([]),
-    );
-
-    return readingListData.list;
+  Future<File> _getLocalFile(String fileName) async {
+    final directory = await getApplicationDocumentsDirectory();
+    return File('${directory.path}/$fileName.json');
   }
 
   @override
-  Future<void> saveReading(ReadingData reading) {
-    var hiveList = getReadingList();
-    if (hiveList.any((element) => element.bookId == reading.bookId)) {
+  Future<void> saveReading(ReadingData readingData) async {
+    final file = await _getLocalFile('reading_list');
+    List<ReadingData> currentList = await getReadingList();
+
+    if (currentList.any((item) => item.bookId == readingData.bookId)) {
       throw DuplicatedReadingError();
     }
-    hiveList.add(reading);
-    final readingListData = ReadingListData(hiveList);
-    return appBox.put(_readingListInfo, readingListData);
+    currentList.add(readingData);
+    final jsonString = jsonEncode(currentList.map((e) => e.toJson()).toList());
+    await file.writeAsString(jsonString);
   }
 
   @override
-  Future<void> clearDB() => appBox.clear();
+  Future<List<ReadingData>> getReadingList() async {
+    final file = await _getLocalFile('reading_list');
 
-  @override
-  Future get(String key) => appBox.get(key);
+    if (!await file.exists()) {
+      return [];
+    }
+
+    final jsonString = await file.readAsString();
+
+    if (jsonString.isEmpty) {
+      return [];
+    }
+
+    final List<dynamic> decoded = jsonDecode(jsonString);
+    return decoded.map((e) => ReadingData.fromJson(e)).toList();
+  }
 }

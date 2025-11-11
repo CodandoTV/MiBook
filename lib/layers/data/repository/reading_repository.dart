@@ -24,8 +24,8 @@ class ReadingRepository implements IReadingRepository {
   }
 
   @override
-  List<ReadingDomain> getReadings() {
-    final data = _dataSource.getReadingData();
+  Future<List<ReadingDomain>> getReadings() async {
+    final data = await _dataSource.getReadingData();
     return data.map((e) => e.toDomainModel()).toList();
   }
 }

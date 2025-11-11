@@ -4,5 +4,5 @@ abstract class IReadingRepository {
   Future<void> startReading({
     required ReadingDomain reading,
   });
-  List<ReadingDomain> getReadings();
+  Future<List<ReadingDomain>> getReadings();
 }
