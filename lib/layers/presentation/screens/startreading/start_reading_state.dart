@@ -3,22 +3,12 @@ part 'start_reading_state.freezed.dart';
 
 @freezed
 class StartReadingState with _$StartReadingState {
-  @override
-  final String? inputErrorMessage;
-  @override
-  final double progress;
-  @override
-  final bool shouldNavigateBack;
+  const factory StartReadingState({
+    String? inputErrorMessage,
+    @Default(0.0) double progress,
+    @Default(false) bool shouldNavigateBack,
+    @Default(false) bool shouldShowSavingError,
+  }) = _StartReadingState;
 
-  StartReadingState({
-    required this.inputErrorMessage,
-    required this.progress,
-    required this.shouldNavigateBack,
-  });
-
-  static StartReadingState get initial => StartReadingState(
-    inputErrorMessage: null,
-    progress: 0.0,
-    shouldNavigateBack: false,
-  );
+  factory StartReadingState.initial() => const StartReadingState();
 }

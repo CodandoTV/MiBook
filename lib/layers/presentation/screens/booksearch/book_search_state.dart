@@ -5,34 +5,16 @@ part 'book_search_state.freezed.dart';
 
 @freezed
 class BookSearchState with _$BookSearchState {
-  @override
-  final bool isLoading;
-  @override
-  final String? errorMessage;
-  @override
-  final String searchText;
-  @override
-  final List<BookUI> books;
-  @override
-  final bool isPageLoading;
-  @override
-  final bool canLoadNextPage;
+  const factory BookSearchState({
+    @Default(false) bool isLoading,
+    String? errorMessage,
+    @Default('') String searchText,
+    @Default([]) List<BookUI> books,
+    @Default(false) bool isPageLoading,
+    @Default(true) bool canLoadNextPage,
+  }) = _BookSearchState;
 
-  BookSearchState({
-    required this.isLoading,
-    required this.errorMessage,
-    required this.searchText,
-    required this.books,
-    required this.isPageLoading,
-    required this.canLoadNextPage,
-  });
+  const BookSearchState._();
 
-  factory BookSearchState.initial() => BookSearchState(
-    isLoading: false,
-    errorMessage: null,
-    searchText: '',
-    books: [],
-    isPageLoading: false,
-    canLoadNextPage: true,
-  );
+  factory BookSearchState.initial() => const BookSearchState();
 }

@@ -3,7 +3,6 @@ import 'package:mibook/layers/domain/models/reading_domain.dart';
 part 'reading_data.g.dart';
 
 @JsonSerializable()
-@freezed
 class ReadingData {
   final String bookId;
   final String bookName;

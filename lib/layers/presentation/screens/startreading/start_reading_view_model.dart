@@ -15,7 +15,7 @@ class StartReadingViewModel extends Bloc<StartReadingEvent, StartReadingState> {
   StartReadingViewModel(
     this._startReading,
     @factoryParam this.book,
-  ) : super(StartReadingState.initial) {
+  ) : super(StartReadingState.initial()) {
     // Handle DidEditProgress Event
     on<DidEditProgressEvent>((event, emit) {
       emit(_didEditProgress(event));
