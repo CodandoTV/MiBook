@@ -50,6 +50,7 @@ class BookDetailsViewModel extends Bloc<BookDetailsEvent, BookDetailsState> {
         emit(state.copyWith(bookProgress: progress));
       }
     });
+    on<DidClickFavoriteIconEvent>((event, emit) {});
   }
 
   Future<BookDetailsUI?> loadBookDetails() async {
