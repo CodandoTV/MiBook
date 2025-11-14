@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:mibook/core/designsystem/atoms/colors.dart';
 import 'package:mibook/core/designsystem/molecules/buttons/primary_button.dart';
 import 'package:mibook/core/designsystem/organisms/app_nav_bar.dart';
 import 'package:mibook/core/designsystem/organisms/list_item.dart';
@@ -46,6 +47,13 @@ class _BookDetailsScaffold extends StatelessWidget {
               titleText: state.bookDetails?.title ?? 'Loading...',
               isTitleLoading: state.isLoading,
               onBack: context.router.maybePop,
+              trailing: IconButton(
+                onPressed: () {},
+                icon: Icon(
+                  state.isFavorite ? Icons.star : Icons.star_border,
+                  color: state.isFavorite ? favorite : null,
+                ),
+              ),
             );
           },
         ),

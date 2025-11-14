@@ -9,6 +9,7 @@ class BookDetailsState with _$BookDetailsState {
     BookDetailsUI? bookDetails,
     @Default(false) bool isLoading,
     @Default(0.0) double bookProgress,
+    @Default(true) bool isFavorite,
   }) = _BookDetailsState;
 
   const BookDetailsState._(); // allows adding custom getters or methods later
