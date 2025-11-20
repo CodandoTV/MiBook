@@ -2,6 +2,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mibook/layers/domain/models/reading_domain.dart';
 import 'package:mibook/layers/domain/usecases/get_book_details.dart';
+import 'package:mibook/layers/domain/usecases/get_favorite.dart';
+import 'package:mibook/layers/domain/usecases/set_favorite.dart';
 import 'package:mibook/layers/domain/usecases/start_reading.dart';
 import 'package:mibook/layers/presentation/screens/bookdetails/book_details_event.dart';
 import 'package:mibook/layers/presentation/screens/bookdetails/book_details_state.dart';
@@ -11,11 +13,15 @@ import 'package:mibook/layers/presentation/screens/bookdetails/book_details_ui.d
 class BookDetailsViewModel extends Bloc<BookDetailsEvent, BookDetailsState> {
   final IGetBookDetails _getBookDetails;
   final IStartReading _startReading;
+  final ISetFavorite _setFavorite;
+  final IGetFavorite _getFavorite;
   String? bookId;
 
   BookDetailsViewModel(
     this._getBookDetails,
     this._startReading,
+    this._setFavorite,
+    this._getFavorite,
     @factoryParam this.bookId,
   ) : super(BookDetailsState.initial()) {
     on<DidLoadEvent>((event, emit) async {
@@ -26,11 +32,14 @@ class BookDetailsViewModel extends Bloc<BookDetailsEvent, BookDetailsState> {
         ),
       );
       try {
-        final bookDetails = await loadBookDetails();
+        final bookDetails = await _loadBookDetails();
+        final isFavorite = await _loadFavoriteStatus();
+
         emit(
           state.copyWith(
             isLoading: false,
             bookDetails: bookDetails,
+            isFavorite: isFavorite,
           ),
         );
       } catch (e) {
@@ -38,6 +47,7 @@ class BookDetailsViewModel extends Bloc<BookDetailsEvent, BookDetailsState> {
           state.copyWith(
             isLoading: false,
             errorMessage: e.toString(),
+            isFavorite: false,
           ),
         );
       }
@@ -50,16 +60,27 @@ class BookDetailsViewModel extends Bloc<BookDetailsEvent, BookDetailsState> {
         emit(state.copyWith(bookProgress: progress));
       }
     });
-    on<DidClickFavoriteIconEvent>((event, emit) {});
+    on<DidClickFavoriteIconEvent>((event, emit) {
+      setFavoriteStatus(isFavorite: !state.isFavorite);
+      emit(state.copyWith(isFavorite: !state.isFavorite));
+    });
   }
 
-  Future<BookDetailsUI?> loadBookDetails() async {
+  Future<BookDetailsUI?> _loadBookDetails() async {
     if (bookId != null) {
       final bookDetails = await _getBookDetails(id: bookId!);
       return BookDetailsUI.fromDomain(bookDetails);
     } else {
       return null;
     }
+  }
+
+  Future<bool> _loadFavoriteStatus() async {
+    if (bookId != null) {
+      final isFavorite = await _getFavorite(bookId!);
+      return isFavorite;
+    }
+    return false;
   }
 
   Future<void> startReading({required double progress}) async {
@@ -73,5 +94,17 @@ class BookDetailsViewModel extends Bloc<BookDetailsEvent, BookDetailsState> {
         ),
       );
     }
+  }
+
+  Future<void> setFavoriteStatus({required bool isFavorite}) async {
+    if (state.bookDetails != null) {
+      await _setFavorite(
+        state.bookDetails!.toDomain,
+        isFavorite,
+      );
+    }
+    // return state.copyWith(
+    //   isFavorite: isFavorite,
+    // );
   }
 }

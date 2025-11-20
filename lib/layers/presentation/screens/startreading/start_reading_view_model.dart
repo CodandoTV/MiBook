@@ -70,7 +70,6 @@ class StartReadingViewModel extends Bloc<StartReadingEvent, StartReadingState> {
       await _startReading(reading: reading);
       return state.copyWith(shouldNavigateBack: true);
     } catch (_) {
-      print('Error saving reading for bookId: ${book.id}');
       return state.copyWith(shouldShowSavingError: true);
     }
   }

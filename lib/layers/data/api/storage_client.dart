@@ -94,24 +94,32 @@ class StorageClient implements IStorageClient {
 
   @override
   Future<void> setFavoriteStatus(BookItem book, bool isFavorite) async {
+    // 1. update favorite book list
     final file = await _getLocalFile(_favoriteBooks);
     List<BookItem> currentList = await getFavoriteBooks();
 
-    if (currentList.any((item) => item.id == book.id)) {
-      throw DuplicatedReadingError();
-    }
     currentList.add(book);
     final jsonString = jsonEncode(currentList.map((e) => e.toJson()).toList());
     await file.writeAsString(jsonString);
 
+    // 2. update favorite status map
     final isFavoriteFile = await _getLocalFile(_isFavoriteBook);
-    final jsonStringIsFavorite = await isFavoriteFile.readAsString();
 
-    Map<String, bool> isFavoriteBookMap = await _parseAsBoolMap(
-      jsonStringIsFavorite,
-    );
+    Map<String, bool> isFavoriteBookMap = {};
 
+    // Safely read existing map
+    if (await isFavoriteFile.exists()) {
+      final jsonStringIsFavorite = await isFavoriteFile.readAsString();
+
+      if (jsonStringIsFavorite.isNotEmpty) {
+        isFavoriteBookMap = await _parseAsBoolMap(jsonStringIsFavorite);
+      }
+    }
+
+    // Update or insert
     isFavoriteBookMap[book.id] = isFavorite;
+
+    // Write back
     final isFavoriteJsonString = jsonEncode(isFavoriteBookMap);
     await isFavoriteFile.writeAsString(isFavoriteJsonString);
   }

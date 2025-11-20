@@ -30,4 +30,14 @@ class BookDetailsUI {
       pageCount: domain.pageCount,
     );
   }
+
+  BookDomain get toDomain => BookDomain(
+    id: id,
+    kind: kind,
+    title: title,
+    authors: authors.isNotEmpty ? authors.split(', ') : [],
+    description: description,
+    thumbnail: thumbnail,
+    pageCount: pageCount,
+  );
 }

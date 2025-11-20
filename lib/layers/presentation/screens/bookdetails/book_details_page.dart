@@ -38,6 +38,7 @@ class _BookDetailsScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = context.read<BookDetailsViewModel>();
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(kToolbarHeight),
@@ -47,11 +48,16 @@ class _BookDetailsScaffold extends StatelessWidget {
               titleText: state.bookDetails?.title ?? 'Loading...',
               isTitleLoading: state.isLoading,
               onBack: context.router.maybePop,
-              trailing: IconButton(
-                onPressed: () {},
-                icon: Icon(
-                  state.isFavorite ? Icons.star : Icons.star_border,
-                  color: state.isFavorite ? favorite : null,
+              trailing: Visibility(
+                visible: !state.isLoading,
+                child: IconButton(
+                  onPressed: () {
+                    viewModel.add(DidClickFavoriteIconEvent());
+                  },
+                  icon: Icon(
+                    state.isFavorite ? Icons.star : Icons.star_border,
+                    color: state.isFavorite ? favorite : null,
+                  ),
                 ),
               ),
             );
