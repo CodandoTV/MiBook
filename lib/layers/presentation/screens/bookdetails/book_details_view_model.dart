@@ -103,8 +103,5 @@ class BookDetailsViewModel extends Bloc<BookDetailsEvent, BookDetailsState> {
         isFavorite,
       );
     }
-    // return state.copyWith(
-    //   isFavorite: isFavorite,
-    // );
   }
 }
