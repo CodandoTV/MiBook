@@ -98,7 +98,8 @@ class StorageClient implements IStorageClient {
     final file = await _getLocalFile(_favoriteBooks);
     List<BookItem> currentList = await getFavoriteBooks();
 
-    currentList.add(book);
+    currentList.removeWhere((e) => e.id == book.id);
+    if (isFavorite) currentList.add(book);
     final jsonString = jsonEncode(currentList.map((e) => e.toJson()).toList());
     await file.writeAsString(jsonString);
 

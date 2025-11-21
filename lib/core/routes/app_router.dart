@@ -11,6 +11,13 @@ class AppRouter extends RootStackRouter {
       initial: true,
       children: [
         AutoRoute(
+          page: FavoriteRoute.page,
+          children: [
+            AutoRoute(page: FavoriteListRoute.page),
+            AutoRoute(page: BookDetailsRoute.page),
+          ],
+        ),
+        AutoRoute(
           page: HomeRoute.page,
           children: [AutoRoute(page: ReadingListRoute.page)],
         ),
