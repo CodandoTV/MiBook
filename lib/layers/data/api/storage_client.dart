@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mibook/layers/data/api/custom_errors.dart';
 import 'package:mibook/layers/data/models/book_list_data.dart';
@@ -101,6 +102,7 @@ class StorageClient implements IStorageClient {
 
     currentList.add(book);
     final jsonString = jsonEncode(currentList.map((e) => e.toJson()).toList());
+    debugPrint('Favorite books JSON: $jsonString');
     await file.writeAsString(jsonString);
 
     // 2. update favorite status map
