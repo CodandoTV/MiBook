@@ -24,7 +24,7 @@ class BookUI {
       id: domain.id,
       kind: domain.kind,
       title: domain.title,
-      authors: (domain.authors ?? []).join(', '),
+      authors: (domain.authors).join(', '),
       description: domain.description ?? '',
       thumbnail: domain.thumbnail,
       pageCount: domain.pageCount,

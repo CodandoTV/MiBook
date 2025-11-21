@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mibook/core/utils/strings.dart';
 import 'package:mibook/layers/domain/usecases/get_book_details.dart';
 import 'package:mibook/layers/domain/usecases/get_favorite.dart';
 import 'package:mibook/layers/domain/usecases/set_favorite.dart';
