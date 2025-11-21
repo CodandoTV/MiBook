@@ -7,3 +7,7 @@ class UnauthorizedError extends DioException {
 class DuplicatedReadingError extends Error {
   DuplicatedReadingError();
 }
+
+class DuplicatedBookError extends Error {
+  DuplicatedBookError();
+}

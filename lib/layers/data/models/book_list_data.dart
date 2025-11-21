@@ -39,8 +39,8 @@ class BookItem {
   final String etag;
   final String selfLink;
   final VolumeInfo volumeInfo;
-  final SaleInfo saleInfo;
-  final AccessInfo accessInfo;
+  final SaleInfo? saleInfo;
+  final AccessInfo? accessInfo;
   final SearchInfo? searchInfo;
 
   BookItem({
@@ -49,8 +49,8 @@ class BookItem {
     required this.etag,
     required this.selfLink,
     required this.volumeInfo,
-    required this.saleInfo,
-    required this.accessInfo,
+    this.saleInfo,
+    this.accessInfo,
     this.searchInfo,
   });
 
@@ -64,10 +64,24 @@ class BookItem {
       id: id,
       kind: kind,
       title: volumeInfo.title,
-      authors: volumeInfo.authors,
+      authors: volumeInfo.authors ?? [],
       description: volumeInfo.description,
       thumbnail: volumeInfo.imageLinks?.thumbnail,
       pageCount: volumeInfo.pageCount ?? 100,
+    );
+  }
+
+  factory BookItem.fromDomain(BookDomain domain) {
+    return BookItem(
+      kind: domain.kind,
+      id: domain.id,
+      etag: '',
+      selfLink: '',
+      volumeInfo: VolumeInfo(
+        title: domain.title,
+        authors: domain.authors,
+        pageCount: domain.pageCount,
+      ),
     );
   }
 }

@@ -4,7 +4,7 @@ import 'package:mibook/core/di/di.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await configureDependencies();
+  configureDependencies();
   runApp(CoreApplication());
 }
 

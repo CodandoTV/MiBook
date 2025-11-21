@@ -24,10 +24,20 @@ class BookDetailsUI {
       id: domain.id,
       kind: domain.kind,
       title: domain.title,
-      authors: (domain.authors ?? []).join(', '),
+      authors: (domain.authors).join(', '),
       description: domain.description ?? '',
       thumbnail: domain.thumbnail,
       pageCount: domain.pageCount,
     );
   }
+
+  BookDomain get toDomain => BookDomain(
+    id: id,
+    kind: kind,
+    title: title,
+    authors: authors.isNotEmpty ? authors.split(', ') : [],
+    description: description,
+    thumbnail: thumbnail,
+    pageCount: pageCount,
+  );
 }

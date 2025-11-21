@@ -14,3 +14,5 @@ class DidChangeProgressTextEvent extends BookDetailsEvent {
   final int progress;
   DidChangeProgressTextEvent(this.progress);
 }
+
+class DidClickFavoriteIconEvent extends BookDetailsEvent {}

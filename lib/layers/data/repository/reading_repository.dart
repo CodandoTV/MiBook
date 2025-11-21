@@ -4,7 +4,7 @@ import 'package:mibook/layers/data/models/reading_data.dart';
 import 'package:mibook/layers/domain/models/reading_domain.dart';
 import 'package:mibook/layers/domain/repository/reading_repository.dart';
 
-@Singleton(as: IReadingRepository)
+@LazySingleton(as: IReadingRepository)
 class ReadingRepository implements IReadingRepository {
   final IReadingDataSource _dataSource;
 

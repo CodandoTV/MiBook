@@ -7,6 +7,7 @@ enum AppNavBarTextAlignment { center, start }
 class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
   final String titleText;
   final bool isTitleLoading;
+  final Widget? trailing;
   final AppNavBarTextAlignment textAlignment;
   final Function()? onBack;
 
@@ -16,6 +17,7 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
     required this.titleText,
     this.isTitleLoading = false,
     this.textAlignment = AppNavBarTextAlignment.center,
+    this.trailing,
   });
 
   Widget _layout() {
@@ -45,6 +47,14 @@ class AppNavBar extends StatelessWidget implements PreferredSizeWidget {
               alignment: Alignment.center,
               child: _title(),
             ),
+            if (trailing != null)
+              Transform.translate(
+                offset: const Offset(0, -8),
+                child: Align(
+                  alignment: Alignment.topRight,
+                  child: trailing,
+                ),
+              ),
           ],
         );
 

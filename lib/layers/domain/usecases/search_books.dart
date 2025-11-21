@@ -9,7 +9,7 @@ abstract class ISearchBooks {
   });
 }
 
-@Injectable(as: ISearchBooks)
+@LazySingleton(as: ISearchBooks)
 class SearchBooks implements ISearchBooks {
   final ISearchRepository _repository;
 

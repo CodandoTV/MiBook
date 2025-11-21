@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mibook/layers/domain/usecases/search_books.dart';
 import 'package:mibook/layers/presentation/screens/booksearch/book_search_event.dart';
@@ -13,7 +12,6 @@ class BookSearchViewModel extends Bloc<BookSearchEvent, BookSearchState> {
 
   BookSearchViewModel(this._searchBooks) : super(BookSearchState.initial()) {
     on<DidChangeSearchTextEvent>((event, emit) async {
-      debugPrint('DidChangeSearchTextEvent: ${event.text}');
       emit(state.copyWith(searchText: event.text));
     });
     on<DidClickSearchEvent>((event, emit) async {
@@ -26,9 +24,7 @@ class BookSearchViewModel extends Bloc<BookSearchEvent, BookSearchState> {
           canLoadNextPage: true,
         ),
       );
-      debugPrint('Click search with text: ${state.searchText}');
       final response = await _search(state.searchText);
-      debugPrint('Response received with $response');
       emit(
         state.copyWith(
           books: response,
@@ -57,7 +53,6 @@ class BookSearchViewModel extends Bloc<BookSearchEvent, BookSearchState> {
           ),
         );
       } catch (e) {
-        debugPrint('Error during pagination: $e');
         emit(
           state.copyWith(
             isPageLoading: false,
