@@ -5,7 +5,7 @@ abstract class IGetFavorite {
   Future<bool> call(String id);
 }
 
-@Singleton(as: IGetFavorite)
+@LazySingleton(as: IGetFavorite)
 class GetFavorite implements IGetFavorite {
   final IFavoriteRepository _favoriteRepository;
 

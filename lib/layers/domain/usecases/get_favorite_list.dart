@@ -6,7 +6,7 @@ abstract class IGetFavoriteList {
   Future<List<BookDomain>> call();
 }
 
-@Singleton(as: IGetFavoriteList)
+@LazySingleton(as: IGetFavoriteList)
 class GetFavoriteList implements IGetFavoriteList {
   final IFavoriteRepository _favoriteRepository;
 

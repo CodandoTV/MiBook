@@ -8,7 +8,7 @@ abstract class IFavoriteDataSource {
   Future<List<BookItem>> getFavoriteBooks();
 }
 
-@Singleton(as: IFavoriteDataSource)
+@LazySingleton(as: IFavoriteDataSource)
 class FavoriteDataSource implements IFavoriteDataSource {
   final IStorageClient storageClient;
 

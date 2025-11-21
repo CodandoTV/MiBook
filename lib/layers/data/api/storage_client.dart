@@ -19,7 +19,7 @@ abstract class IStorageClient {
   Future<List<BookItem>> getFavoriteBooks();
 }
 
-@Singleton(as: IStorageClient)
+@LazySingleton(as: IStorageClient)
 class StorageClient implements IStorageClient {
   Future<File> _getLocalFile(String fileName) async {
     final directory = await getApplicationDocumentsDirectory();
@@ -31,8 +31,9 @@ class StorageClient implements IStorageClient {
     T Function(Map<String, dynamic>) fromJson,
   ) async {
     final file = await _getLocalFile(fileName);
+    final invalidFile = await file.exists() == false;
 
-    if (!await file.exists()) {
+    if (invalidFile) {
       return [];
     }
 

@@ -6,7 +6,7 @@ abstract class ISetFavorite {
   Future<void> call(BookDomain book, bool isFavorite);
 }
 
-@Singleton(as: ISetFavorite)
+@LazySingleton(as: ISetFavorite)
 class SetFavorite implements ISetFavorite {
   final IFavoriteRepository _favoriteRepository;
 

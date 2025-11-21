@@ -4,7 +4,7 @@ import 'package:mibook/layers/data/models/book_list_data.dart';
 import 'package:mibook/layers/domain/models/book_list_domain.dart';
 import 'package:mibook/layers/domain/repository/favorite_repository.dart';
 
-@Singleton(as: IFavoriteRepository)
+@LazySingleton(as: IFavoriteRepository)
 class FavoriteRepository implements IFavoriteRepository {
   final IFavoriteDataSource _dataSource;
 
