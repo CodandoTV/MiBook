@@ -1,1 +1,1 @@
-enum Feature { readingList, search, objectives }
+enum Feature { readingList, search, favorite, objectives }

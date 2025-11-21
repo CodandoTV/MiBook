@@ -11,7 +11,12 @@ class DashboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AutoTabsRouter(
-      routes: [ReadingListRoute(), BookSearchRoute(), CurrentObjectiveRoute()],
+      routes: [
+        ReadingListRoute(),
+        BookSearchRoute(),
+        FavoriteListRoute(),
+        CurrentObjectiveRoute(),
+      ],
       transitionBuilder: (context, child, animation) =>
           FadeTransition(opacity: animation, child: child),
       builder: (context, child) {
@@ -26,6 +31,7 @@ class DashboardPage extends StatelessWidget {
                 featureList: [
                   Feature.readingList,
                   Feature.search,
+                  Feature.favorite,
                   Feature.objectives,
                 ],
                 onSelectIndex: router.setActiveIndex,

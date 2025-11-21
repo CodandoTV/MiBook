@@ -7,3 +7,5 @@ class DidTapUnfavoriteEvent extends FavoriteListEvent {
 
   DidTapUnfavoriteEvent(this.bookId);
 }
+
+class DidRefreshEvent extends FavoriteListEvent {}

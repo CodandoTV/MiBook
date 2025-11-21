@@ -1,10 +1,13 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:injectable/injectable.dart';
 import 'package:mibook/layers/domain/usecases/get_favorite_list.dart';
 import 'package:mibook/layers/domain/usecases/set_favorite.dart';
 import 'package:mibook/layers/presentation/screens/favoritelist/favorite_item_ui.dart';
 import 'package:mibook/layers/presentation/screens/favoritelist/favorite_list_event.dart';
 import 'package:mibook/layers/presentation/screens/favoritelist/favorite_list_state.dart';
 
+@injectable
 class FavoriteListViewModel extends Bloc<FavoriteListEvent, FavoriteListState> {
   final IGetFavoriteList _getFavoriteList;
   final ISetFavorite _setFavorite;
@@ -15,10 +18,16 @@ class FavoriteListViewModel extends Bloc<FavoriteListEvent, FavoriteListState> {
   ) : super(FavoriteListState.initial()) {
     on<DidAppearEvent>((event, emit) async {
       final result = await _loadFavoriteBooks();
+      debugPrint('result = ${result.books.map((e) => e.thumbnail).toList()}');
       emit(result);
     });
     on<DidTapUnfavoriteEvent>((event, emit) async {
       final result = await _unfavoriteBook(event.bookId);
+      emit(result);
+    });
+    on<DidRefreshEvent>((event, emit) async {
+      final result = await _loadFavoriteBooks();
+      debugPrint('result = ${result.books.map((e) => e.thumbnail).toList()}');
       emit(result);
     });
   }
