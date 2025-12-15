@@ -49,21 +49,37 @@ class FavoriteListScaffold extends StatelessWidget {
             },
             child: Padding(
               padding: const EdgeInsets.all(16.0),
-              child: ListView.builder(
+              child: ListView.separated(
                 itemCount: state.books.length,
+                separatorBuilder: (context, index) => const SizedBox(
+                  height: 12,
+                ),
                 itemBuilder: (context, index) {
                   final book = state.books[index];
-                  return ListItem(
-                    onTap: () => context.router.push(
-                      BookDetailsRoute(id: book.id),
+                  return Dismissible(
+                    key: Key(book.id),
+                    direction: DismissDirection.endToStart,
+                    onDismissed: (direction) => viewModel.add(
+                      DidTapUnfavoriteEvent(book.id),
                     ),
-                    input: BookItemInput(
-                      id: book.id,
-                      kind: book.kind,
-                      title: book.title,
-                      authors: book.authors,
-                      description: book.description,
-                      thumbnail: book.thumbnail,
+                    background: Container(
+                      color: Colors.red,
+                      alignment: Alignment.centerRight,
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: const Icon(Icons.remove, color: Colors.white),
+                    ),
+                    child: ListItem(
+                      onTap: () => context.router.push(
+                        BookDetailsRoute(id: book.id),
+                      ),
+                      input: BookItemInput(
+                        id: book.id,
+                        kind: book.kind,
+                        title: book.title,
+                        authors: book.authors,
+                        description: book.description,
+                        thumbnail: book.thumbnail,
+                      ),
                     ),
                   );
                 },

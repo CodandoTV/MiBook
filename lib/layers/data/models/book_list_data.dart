@@ -81,6 +81,9 @@ class BookItem {
         title: domain.title,
         authors: domain.authors,
         pageCount: domain.pageCount,
+        imageLinks: ImageLinks(
+          thumbnail: domain.thumbnail,
+        ),
       ),
     );
   }
