@@ -48,7 +48,6 @@ void main() {
         ),
       );
       verify(mockGetFavoriteList()).called(1);
-      // expect(sut.state.books, [fakeFavoriteUI]);
     });
   });
 }
