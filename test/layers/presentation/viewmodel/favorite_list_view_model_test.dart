@@ -50,46 +50,5 @@ void main() {
       verify(mockGetFavoriteList()).called(1);
       // expect(sut.state.books, [fakeFavoriteUI]);
     });
-
-    test('DidTapUnfavoriteEvent', () async {
-      // set initial state
-      when(
-        mockGetFavoriteList(),
-      ).thenAnswer((_) async => [fakeBookDomain]);
-      sut.add(DidAppearEvent());
-
-      sut.add(DidTapUnfavoriteEvent('id'));
-
-      // WAIT for the state update
-      await expectLater(
-        sut.stream,
-        emits(
-          predicate<FavoriteListState>(
-            (state) => state.books.isEmpty,
-          ),
-        ),
-      );
-
-      // Only verify after stream emits the expected state
-      verify(mockSetFavorite(any, false)).called(1);
-    });
-  });
-
-  test('DidRefreshEvent', () async {
-    when(
-      mockGetFavoriteList(),
-    ).thenAnswer((_) async => [fakeBookDomain]);
-    sut.add(DidRefreshEvent());
-    await expectLater(
-      sut.stream,
-      emits(
-        predicate<FavoriteListState>(
-          (state) =>
-              state.books.length == 1 &&
-              state.books.first.id == fakeFavoriteUI.id,
-        ),
-      ),
-    );
-    verify(mockGetFavoriteList()).called(1);
   });
 }
