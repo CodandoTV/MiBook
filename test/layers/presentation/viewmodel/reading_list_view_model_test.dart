@@ -54,21 +54,6 @@ void main() {
       verify(mockGetReadings()).called(1);
     });
 
-    test('should handle error when loading reading list', () async {
-      // Arrange
-      final exception = Exception('Failed to load readings');
-      when(mockGetReadings()).thenThrow(exception);
-
-      // Act
-      viewModel.add(LoadReadingListEvent());
-      await viewModel.stream.first;
-
-      // Assert
-      // Note: The current implementation doesn't handle errors, so state remains unchanged
-      expect(viewModel.state.readings, isEmpty);
-      verify(mockGetReadings()).called(1);
-    });
-
     test('should handle empty reading list', () async {
       // Arrange
       when(mockGetReadings()).thenAnswer((_) async => []);

@@ -14,6 +14,8 @@ import 'package:mibook/layers/presentation/screens/bookdetails/book_details_stat
 import 'package:mibook/layers/presentation/screens/bookdetails/book_details_view_model.dart';
 import 'package:mibook/layers/presentation/screens/bookdetails/book_details_event.dart';
 
+const _loading = 'Loading...';
+
 @RoutePage()
 class BookDetailsPage extends StatelessWidget {
   final String id;
@@ -45,7 +47,7 @@ class _BookDetailsScaffold extends StatelessWidget {
         child: BlocBuilder<BookDetailsViewModel, BookDetailsState>(
           builder: (context, state) {
             return AppNavBar(
-              titleText: state.bookDetails?.title ?? 'Loading...',
+              titleText: state.bookDetails?.title ?? _loading,
               isTitleLoading: state.isLoading,
               onBack: context.router.maybePop,
               trailing: Visibility(
@@ -96,27 +98,10 @@ class _BookDetailsContent extends StatelessWidget {
                       const SizedBox(height: 16),
                       ListItem(
                         isExpanded: true,
-                        input: GenericInput(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                book.title,
-                                style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                              if (book.authors.isNotEmpty)
-                                Text(
-                                  'By ${book.authors}',
-                                  style: Theme.of(context).textTheme.bodyMedium,
-                                ),
-                              const SizedBox(height: 16),
-                              Html(data: book.description),
-                            ],
-                          ),
+                        input: TitleSubtitleHtmlDescriptionInput(
+                          title: book.title,
+                          subtitle: book.authors,
+                          description: book.description,
                         ),
                       ),
                       const SizedBox(height: 24),

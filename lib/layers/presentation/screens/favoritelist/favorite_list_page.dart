@@ -72,7 +72,7 @@ class FavoriteListScaffold extends StatelessWidget {
                       onTap: () => context.router.push(
                         BookDetailsRoute(id: book.id),
                       ),
-                      input: BookItemInput(
+                      input: TitleImageDescriptionInput(
                         id: book.id,
                         kind: book.kind,
                         title: book.title,

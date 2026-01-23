@@ -10,8 +10,9 @@ class ReadingListViewModel extends Bloc<ReadingListEvent, ReadingListState> {
   final IGetReadings _getReadings;
 
   ReadingListViewModel(this._getReadings) : super(ReadingListState()) {
-    on<LoadReadingListEvent>((event, emit) {
-      _loadReadingList().then((state) => emit(state));
+    on<LoadReadingListEvent>((event, emit) async {
+      final state = await _loadReadingList();
+      emit(state);
     });
     on<RefreshReadingListEvent>((event, emit) {});
     on<RemoveReadingItemEvent>((event, emit) {});
@@ -26,5 +27,15 @@ class ReadingListViewModel extends Bloc<ReadingListEvent, ReadingListState> {
           )
           .toList(),
     );
+  }
+
+  Future<ReadingListState> _refreshReadingList() async {
+    return state;
+  }
+
+  Future<ReadingListState> _removeReadingItem(
+    RemoveReadingItemEvent event,
+  ) async {
+    return state;
   }
 }
