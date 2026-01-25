@@ -1,6 +1,8 @@
 const home = 'Home';
 const search = 'Search';
 const objectives = 'Objectives';
+const favorite = 'Favorite';
+const favoriteList = 'Favorite List';
 const searchBooks = 'Search Books';
 const startReading = 'Start Reading';
 const percent = '%';

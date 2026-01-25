@@ -11,6 +11,8 @@ extension FeatureUtils on Feature {
         return strings.search;
       case Feature.objectives:
         return strings.objectives;
+      case Feature.favorite:
+        return strings.favorite;
     }
   }
 
@@ -22,6 +24,8 @@ extension FeatureUtils on Feature {
         return Icons.search_outlined;
       case Feature.objectives:
         return Icons.book;
+      case Feature.favorite:
+        return Icons.favorite;
     }
   }
 }
