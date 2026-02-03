@@ -1,6 +1,6 @@
 class ReadingListEvent {}
 
-class LoadReadingListEvent extends ReadingListEvent {}
+class WatchReadingListEvent extends ReadingListEvent {}
 
 class RefreshReadingListEvent extends ReadingListEvent {}
 

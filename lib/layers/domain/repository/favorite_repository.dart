@@ -4,4 +4,5 @@ abstract class IFavoriteRepository {
   Future<void> setFavoriteStatus(BookDomain book, bool isFavorite);
   Future<bool> getFavoriteStatus(String bookId);
   Future<List<BookDomain>> getFavoriteBooks();
+  Stream<List<BookDomain>> watchFavoriteBooks();
 }

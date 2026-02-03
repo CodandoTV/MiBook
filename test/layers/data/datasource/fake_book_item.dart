@@ -1,6 +1,6 @@
 import 'package:mibook/layers/data/models/book_list_data.dart';
 
-final fakeBookItem = BookItem(
+final fakeBookItem = BookData(
   kind: 'fiction',
   id: 'id',
   etag: 'tag',

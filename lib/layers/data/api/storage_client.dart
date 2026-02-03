@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -15,13 +16,27 @@ const _isFavoriteBook = 'is_favorite_book';
 abstract class IStorageClient {
   Future<void> saveReading(ReadingData readingData);
   Future<List<ReadingData>> getReadingList();
-  Future<void> setFavoriteStatus(BookItem book, bool isFavorite);
+  Future<void> setFavoriteStatus(BookData book, bool isFavorite);
   Future<bool> getFavoriteStatus(String bookId);
-  Future<List<BookItem>> getFavoriteBooks();
+  Future<List<BookData>> getFavoriteBooks();
+  Stream<List<ReadingData>> watchReadingList();
+  Stream<List<BookData>> watchFavoriteBooks();
+  void startReadingListWatcher();
+  void startFavoriteBooksWatcher();
+  void dispose();
 }
 
 @LazySingleton(as: IStorageClient)
 class StorageClient implements IStorageClient {
+  final StreamController<List<ReadingData>> _readingListController =
+      StreamController<List<ReadingData>>.broadcast();
+  final StreamController<List<BookData>> _favoriteBooksController =
+      StreamController<List<BookData>>.broadcast();
+
+  StorageClient() {
+    // Initialize the reading list stream with current data
+  }
+
   Future<File> _getLocalFile(String fileName) async {
     final directory = await getApplicationDocumentsDirectory();
     return File('${directory.path}/$fileName.json');
@@ -65,6 +80,7 @@ class StorageClient implements IStorageClient {
 
   @override
   Future<void> saveReading(ReadingData readingData) async {
+    // Save new reading data to local storage
     final file = await _getLocalFile(_readingList);
     List<ReadingData> currentList = await getReadingList();
 
@@ -74,6 +90,11 @@ class StorageClient implements IStorageClient {
     currentList.add(readingData);
     final jsonString = jsonEncode(currentList.map((e) => e.toJson()).toList());
     await file.writeAsString(jsonString);
+
+    // Fetch updated list and add to stream
+    final updatedList = await getReadingList();
+    // This will trigger a refresh in any listeners
+    _readingListController.add(updatedList);
   }
 
   @override
@@ -86,19 +107,19 @@ class StorageClient implements IStorageClient {
   }
 
   @override
-  Future<List<BookItem>> getFavoriteBooks() async {
-    final List<BookItem> favoriteBooks = await _getListFromFile<BookItem>(
+  Future<List<BookData>> getFavoriteBooks() async {
+    final List<BookData> favoriteBooks = await _getListFromFile<BookData>(
       _favoriteBooks,
-      (json) => BookItem.fromJson(json),
+      (json) => BookData.fromJson(json),
     );
     return favoriteBooks;
   }
 
   @override
-  Future<void> setFavoriteStatus(BookItem book, bool isFavorite) async {
+  Future<void> setFavoriteStatus(BookData book, bool isFavorite) async {
     // 1. update favorite book list
     final file = await _getLocalFile(_favoriteBooks);
-    List<BookItem> currentList = await getFavoriteBooks();
+    List<BookData> currentList = await getFavoriteBooks();
 
     currentList.removeWhere((e) => e.id == book.id);
     if (isFavorite) currentList.add(book);
@@ -126,6 +147,7 @@ class StorageClient implements IStorageClient {
     // Write back
     final isFavoriteJsonString = jsonEncode(isFavoriteBookMap);
     await isFavoriteFile.writeAsString(isFavoriteJsonString);
+    _favoriteBooksController.add(currentList);
   }
 
   @override
@@ -147,5 +169,34 @@ class StorageClient implements IStorageClient {
     );
 
     return isFavoriteBookMap[bookId] ?? false;
+  }
+
+  @override
+  Stream<List<ReadingData>> watchReadingList() => _readingListController.stream;
+
+  @override
+  Stream<List<BookData>> watchFavoriteBooks() =>
+      _favoriteBooksController.stream;
+
+  @override
+  void startReadingListWatcher() {
+    Timer.periodic(const Duration(seconds: 2), (timer) async {
+      final currentList = await getReadingList();
+      _readingListController.add(currentList);
+    });
+  }
+
+  @override
+  void startFavoriteBooksWatcher() {
+    Timer.periodic(const Duration(seconds: 2), (timer) async {
+      final currentList = await getFavoriteBooks();
+      _favoriteBooksController.add(currentList);
+    });
+  }
+
+  @override
+  void dispose() {
+    _readingListController.close();
+    _favoriteBooksController.close();
   }
 }

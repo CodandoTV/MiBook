@@ -3,9 +3,10 @@ import 'package:mibook/layers/data/api/storage_client.dart';
 import 'package:mibook/layers/data/models/book_list_data.dart';
 
 abstract class IFavoriteDataSource {
-  Future<void> setFavoriteStatus(BookItem book, bool isFavorite);
+  Future<void> setFavoriteStatus(BookData book, bool isFavorite);
   Future<bool> getFavoriteStatus(String bookId);
-  Future<List<BookItem>> getFavoriteBooks();
+  Future<List<BookData>> getFavoriteBooks();
+  Stream<List<BookData>> watchFavoriteBooks();
 }
 
 @LazySingleton(as: IFavoriteDataSource)
@@ -15,7 +16,7 @@ class FavoriteDataSource implements IFavoriteDataSource {
   FavoriteDataSource(this.storageClient);
 
   @override
-  Future<void> setFavoriteStatus(BookItem book, bool isFavorite) async {
+  Future<void> setFavoriteStatus(BookData book, bool isFavorite) async {
     await storageClient.setFavoriteStatus(book, isFavorite);
   }
 
@@ -25,7 +26,14 @@ class FavoriteDataSource implements IFavoriteDataSource {
   }
 
   @override
-  Future<List<BookItem>> getFavoriteBooks() async {
+  Future<List<BookData>> getFavoriteBooks() async {
     return await storageClient.getFavoriteBooks();
+  }
+
+  @override
+  Stream<List<BookData>> watchFavoriteBooks() {
+    return storageClient.watchFavoriteBooks().map((favoriteBooks) {
+      return favoriteBooks;
+    });
   }
 }

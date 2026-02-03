@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mibook/layers/data/api/storage_client.dart';
 import 'package:mibook/layers/data/datasource/favorite_data_source.dart';
+import 'package:mibook/layers/data/models/book_list_data.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
@@ -38,6 +39,41 @@ void main() {
       final result = await sut.getFavoriteBooks();
       verify(storageClient.getFavoriteBooks()).called(1);
       expect(result, fakeBooks);
+    });
+
+    test(
+      'watchFavoriteBooks emits favorite books from storageClient',
+      () async {
+        // Arrange
+        final fakeBooks = <BookData>[fakeBookItem]; // ajuste se necessário
+        when(
+          storageClient.watchFavoriteBooks(),
+        ).thenAnswer((_) => Stream.value(fakeBooks));
+
+        // Act
+        final stream = sut.watchFavoriteBooks();
+
+        // Assert
+        await expectLater(stream, emits(fakeBooks));
+        verify(storageClient.watchFavoriteBooks()).called(1);
+        verifyNoMoreInteractions(storageClient);
+      },
+    );
+
+    test('watchFavoriteBooks propagates errors from storageClient', () async {
+      // Arrange
+      final error = Exception('storage error');
+      when(storageClient.watchFavoriteBooks()).thenAnswer(
+        (_) => Stream<List<BookData>>.error(error),
+      ); // ajuste se necessário
+
+      // Act
+      final stream = sut.watchFavoriteBooks();
+
+      // Assert
+      await expectLater(stream, emitsError(error));
+      verify(storageClient.watchFavoriteBooks()).called(1);
+      verifyNoMoreInteractions(storageClient);
     });
   });
 }

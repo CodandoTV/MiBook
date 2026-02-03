@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:mibook/layers/domain/models/reading_domain.dart';
 import 'package:mibook/layers/domain/usecases/get_readings.dart';
+import 'package:mibook/layers/domain/usecases/watch_readings.dart';
 import 'package:mibook/layers/presentation/screens/readinglist/reading_list_event.dart';
 import 'package:mibook/layers/presentation/screens/readinglist/reading_list_state.dart';
 import 'package:mibook/layers/presentation/screens/readinglist/reading_list_ui.dart';
@@ -8,34 +12,91 @@ import 'package:mibook/layers/presentation/screens/readinglist/reading_list_ui.d
 @injectable
 class ReadingListViewModel extends Bloc<ReadingListEvent, ReadingListState> {
   final IGetReadings _getReadings;
+  final IWatchReadings _watchReadings;
 
-  ReadingListViewModel(this._getReadings) : super(ReadingListState()) {
-    on<LoadReadingListEvent>((event, emit) async {
-      final state = await _loadReadingList();
-      emit(state);
-    });
-    on<RefreshReadingListEvent>((event, emit) {});
-    on<RemoveReadingItemEvent>((event, emit) {});
+  StreamSubscription<List<ReadingDomain>>? _readingsSubscription;
+
+  ReadingListViewModel(
+    this._getReadings,
+    this._watchReadings,
+  ) : super(ReadingListState()) {
+    on<WatchReadingListEvent>(_onWatchReadingList);
+    on<RefreshReadingListEvent>(_onRefreshReadingList);
+    on<RemoveReadingItemEvent>(_onRemoveReadingItem);
   }
 
-  Future<ReadingListState> _loadReadingList() async {
-    final readings = await _getReadings();
-    return state.copyWith(
-      readings: readings
-          .map(
-            (e) => ReadingUI.fromDomain(e),
-          )
-          .toList(),
-    );
-  }
-
-  Future<ReadingListState> _refreshReadingList() async {
-    return state;
-  }
-
-  Future<ReadingListState> _removeReadingItem(
-    RemoveReadingItemEvent event,
+  Future<void> _onWatchReadingList(
+    WatchReadingListEvent event,
+    Emitter<ReadingListState> emit,
   ) async {
-    return state;
+    // Cancela subscription anterior se existir
+    await _readingsSubscription?.cancel();
+
+    // Usa await for para manter o handler ativo
+    try {
+      await for (final readingDataList in _watchReadings()) {
+        final readingDomainList = readingDataList
+            .map((data) => ReadingUI.fromDomain(data))
+            .toList();
+        emit(
+          state.copyWith(
+            readings: readingDomainList,
+            isLoading: false,
+            errorMessage: '',
+          ),
+        );
+      }
+    } catch (error) {
+      emit(
+        state.copyWith(
+          errorMessage: error.toString(),
+          isLoading: false,
+        ),
+      );
+    }
+  }
+
+  void _onRefreshReadingList(
+    RefreshReadingListEvent event,
+    Emitter<ReadingListState> emit,
+  ) async {
+    // Implement refresh logic here
+    // For example, you could re-emit the current state or fetch fresh data
+    emit(state.copyWith(isLoading: true));
+
+    try {
+      final readings = await _getReadings();
+      emit(
+        state.copyWith(
+          readings: readings.map((e) => ReadingUI.fromDomain(e)).toList(),
+          isLoading: false,
+        ),
+      );
+    } catch (e) {
+      emit(
+        state.copyWith(
+          errorMessage: e.toString(),
+          isLoading: false,
+        ),
+      );
+    }
+  }
+
+  void _onRemoveReadingItem(
+    RemoveReadingItemEvent event,
+    Emitter<ReadingListState> emit,
+  ) async {
+    // Implement remove logic here
+    // For example, remove the item from the current state
+    final updatedReadings = state.readings
+        .where((reading) => reading.bookId != event.bookId)
+        .toList();
+    emit(state.copyWith(readings: updatedReadings));
+  }
+
+  @override
+  Future<void> close() {
+    _readingsSubscription?.cancel();
+    return super.close();
   }
 }
