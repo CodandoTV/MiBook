@@ -5,4 +5,5 @@ abstract class IReadingRepository {
     required ReadingDomain reading,
   });
   Future<List<ReadingDomain>> getReadings();
+  Stream<List<ReadingDomain>> watchReadings();
 }

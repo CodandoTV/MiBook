@@ -6,6 +6,8 @@ part 'favorite_list_state.freezed.dart';
 class FavoriteListState with _$FavoriteListState {
   const factory FavoriteListState({
     @Default([]) List<FavoriteItemUI> books,
+    @Default(false) bool isLoading,
+    String? errorMessage,
   }) = _FavoriteListState;
 
   const FavoriteListState._();

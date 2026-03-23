@@ -7,7 +7,7 @@ abstract class ISearchDataSource {
     required String initTitle,
     required int startIndex,
   });
-  Future<BookItem> searchById({
+  Future<BookData> searchById({
     required String id,
   });
 }
@@ -36,13 +36,13 @@ class SearchDataSource implements ISearchDataSource {
   }
 
   @override
-  Future<BookItem> searchById({
+  Future<BookData> searchById({
     required String id,
   }) async {
     final response = await _apiClient.get(
       endpoint: 'volumes/$id',
     );
-    final data = BookItem.fromJson(response);
+    final data = BookData.fromJson(response);
     return data;
   }
 }

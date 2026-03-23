@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mibook/layers/data/datasource/favorite_data_source.dart';
+import 'package:mibook/layers/data/models/book_list_data.dart';
 import 'package:mibook/layers/data/repository/favorite_repository.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -49,4 +50,23 @@ void main() {
       ).called(1);
     });
   });
+
+  test(
+    'watchFavoriteBooks emits favorite books from data source',
+    () async {
+      // Arrange
+      final fakeBooks = <BookData>[fakeBookItem]; // ajuste se necessário
+      when(
+        mockFavoriteDataSource.watchFavoriteBooks(),
+      ).thenAnswer((_) => Stream.value(fakeBooks));
+
+      // Act
+      final stream = sut.watchFavoriteBooks();
+
+      // Assert
+      await expectLater(stream, emits([fakeBookDomain]));
+      verify(mockFavoriteDataSource.watchFavoriteBooks()).called(1);
+      verifyNoMoreInteractions(mockFavoriteDataSource);
+    },
+  );
 }

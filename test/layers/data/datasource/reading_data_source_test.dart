@@ -11,10 +11,22 @@ import 'reading_data_source_test.mocks.dart';
 void main() {
   late MockIStorageClient storageClient;
   late ReadingDataSource sut;
+  late Stream<List<ReadingData>> mockStream;
 
   setUp() {
     storageClient = MockIStorageClient();
     sut = ReadingDataSource(storageClient);
+    final fakeListData = [
+      ReadingData(
+        'id',
+        'Harry Potter',
+        'image',
+        0.5,
+      ),
+    ];
+    final Iterable<List<ReadingData>> fakeIterableReadingData = [fakeListData];
+    mockStream = Stream.fromIterable(fakeIterableReadingData);
+    when(storageClient.watchReadingList()).thenAnswer((_) => mockStream);
   }
 
   group('ReadingDataSource', () {
@@ -32,6 +44,35 @@ void main() {
       final result = await sut.getReadingData();
       verify(storageClient.getReadingList()).called(1);
       expect(result, fakeData);
+    });
+
+    test('should return the stream from storage client', () async {
+      // Act
+      final result = sut.watchReadingData();
+
+      // Assert
+      expect(result, equals(mockStream));
+      verify(storageClient.watchReadingList()).called(1);
+      verifyNoMoreInteractions(storageClient);
+    });
+
+    test('should emit the same values as the storage client stream', () async {
+      // Arrange
+      final emittedValues = <List<ReadingData>>[];
+
+      // Act
+      final subscription = sut.watchReadingData().listen(
+        (data) => emittedValues.add(data),
+      );
+
+      // // Wait for stream to complete
+      await Future.delayed(Duration.zero);
+      await subscription.cancel();
+
+      // Assert
+      expect(emittedValues.length, equals(1));
+      expect(emittedValues[0].first.bookId, equals('id'));
+      verify(storageClient.watchReadingList()).called(1);
     });
   });
 }

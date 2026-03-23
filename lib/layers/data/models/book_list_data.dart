@@ -8,7 +8,7 @@ class BookListData {
   final String kind;
   final int? totalItems;
   @JsonKey(defaultValue: [])
-  final List<BookItem> items;
+  final List<BookData> items;
 
   BookListData({
     required this.kind,
@@ -33,7 +33,7 @@ class BookListData {
 }
 
 @JsonSerializable()
-class BookItem {
+class BookData {
   final String kind;
   final String id;
   final String etag;
@@ -43,7 +43,7 @@ class BookItem {
   final AccessInfo? accessInfo;
   final SearchInfo? searchInfo;
 
-  BookItem({
+  BookData({
     required this.kind,
     required this.id,
     required this.etag,
@@ -54,10 +54,10 @@ class BookItem {
     this.searchInfo,
   });
 
-  factory BookItem.fromJson(Map<String, dynamic> json) =>
-      _$BookItemFromJson(json);
+  factory BookData.fromJson(Map<String, dynamic> json) =>
+      _$BookDataFromJson(json);
 
-  Map<String, dynamic> toJson() => _$BookItemToJson(this);
+  Map<String, dynamic> toJson() => _$BookDataToJson(this);
 
   BookDomain toDomain() {
     return BookDomain(
@@ -71,8 +71,8 @@ class BookItem {
     );
   }
 
-  factory BookItem.fromDomain(BookDomain domain) {
-    return BookItem(
+  factory BookData.fromDomain(BookDomain domain) {
+    return BookData(
       kind: domain.kind,
       id: domain.id,
       etag: '',

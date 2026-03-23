@@ -22,5 +22,11 @@ class FavoriteRepository implements IFavoriteRepository {
 
   @override
   Future<void> setFavoriteStatus(BookDomain book, bool isFavorite) async =>
-      _dataSource.setFavoriteStatus(BookItem.fromDomain(book), isFavorite);
+      _dataSource.setFavoriteStatus(BookData.fromDomain(book), isFavorite);
+
+  @override
+  Stream<List<BookDomain>> watchFavoriteBooks() =>
+      _dataSource.watchFavoriteBooks().map((dataBooks) {
+        return dataBooks.map((e) => e.toDomain()).toList();
+      });
 }

@@ -28,4 +28,14 @@ class ReadingRepository implements IReadingRepository {
     final data = await _dataSource.getReadingData();
     return data.map((e) => e.toDomainModel()).toList();
   }
+
+  @override
+  Stream<List<ReadingDomain>> watchReadings() =>
+      _dataSource.watchReadingData().map(
+        (dataList) => dataList
+            .map(
+              (e) => e.toDomainModel(),
+            )
+            .toList(),
+      );
 }

@@ -24,4 +24,15 @@ class FavoriteItemUI with _$FavoriteItemUI {
     description: description,
     thumbnail: thumbnail,
   );
+
+  factory FavoriteItemUI.fromDomain(BookDomain domain) {
+    return FavoriteItemUI(
+      id: domain.id,
+      kind: domain.kind,
+      title: domain.title,
+      authors: domain.authors.join(', '),
+      description: domain.description ?? '',
+      thumbnail: domain.thumbnail,
+    );
+  }
 }
